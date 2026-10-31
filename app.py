@@ -7,7 +7,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom Cyberpunk / Dark Green UI matching the exact reference image
+# Custom Cyberpunk / Dark Green UI matching exact requirements
 st.markdown("""
     <style>
     .stApp {
@@ -15,49 +15,33 @@ st.markdown("""
         color: #00FF66;
         font-family: 'Courier New', Courier, monospace;
     }
-    .badge-box {
+    .welcome-btn-box {
         text-align: center;
-        background-color: #0a1f13;
-        border: 1px solid #133b22;
-        color: #00FF66;
-        font-size: 10px;
-        letter-spacing: 2px;
-        padding: 5px 16px;
-        border-radius: 20px;
-        display: inline-block;
-        margin-bottom: 12px;
-        font-weight: bold;
-    }
-    .main-heading {
-        text-align: center;
-        color: #00FF66;
-        font-size: 28px;
-        font-weight: 900;
-        letter-spacing: 2px;
-        text-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
-        margin-bottom: 2px;
-    }
-    .sub-heading {
-        text-align: center;
+        background-color: #0d2616;
+        border: 2px solid #00FF66;
         color: #00FF66;
         font-size: 24px;
         font-weight: 900;
         letter-spacing: 3px;
-        text-shadow: 0 0 12px rgba(0, 255, 102, 0.3);
-        margin-bottom: 8px;
+        padding: 14px 28px;
+        border-radius: 14px;
+        box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+        margin: 0 auto 15px auto;
+        display: block;
+        width: fit-content;
     }
-    .analytics-text {
+    .title-btn-box {
         text-align: center;
-        color: #728a7b;
-        font-size: 11px;
-        letter-spacing: 1.5px;
-        margin-bottom: 15px;
-    }
-    .divider {
-        width: 100%;
-        height: 1px;
-        background-color: #133b22;
-        margin: 0 auto 25px auto;
+        background-color: #07120b;
+        border: 1px solid #133b22;
+        color: #00FF66;
+        font-size: 20px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        padding: 16px;
+        border-radius: 14px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+        margin-bottom: 25px;
     }
     .card-box {
         background-color: #07120b;
@@ -138,12 +122,9 @@ if "page" not in st.session_state:
 if "users_db" not in st.session_state:
     st.session_state.users_db = {}
 
-# 3. Header Section (Exact Image Layout)
-st.markdown("<div style='text-align: center;'><div class='badge-box'>WELCOME TO</div></div>", unsafe_allow_html=True)
-st.markdown("<div class='main-heading'>KUSHAL PRO MAX</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-heading'>TRADING</div>", unsafe_allow_html=True)
-st.markdown("<div class='analytics-text'>ADVANCED FINANCIAL ANALYTICS</div>", unsafe_allow_html=True)
-st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
+# 3. Header Section (Exact User Layout: Welcome in button, Kushal Pro Max Trading together in button)
+st.markdown("<div class='welcome-btn-box'>WELCOME</div>", unsafe_allow_html=True)
+st.markdown("<div class='title-btn-box'>KUSHAL PRO MAX TRADING<br><span style='font-size: 11px; color: #728a7b; letter-spacing: 1.5px;'>ADVANCED FINANCIAL ANALYTICS</span></div>", unsafe_allow_html=True)
 
 # Main Card Container
 with st.container():
@@ -296,7 +277,7 @@ with st.container():
 
     st.markdown("</div>", unsafe_allow_html=True)
 
-# Footer exactly matching the image
+# Footer
 st.markdown("""
     <div class='footer-row'>
         <span>🟢 SYSTEM ONLINE</span>
