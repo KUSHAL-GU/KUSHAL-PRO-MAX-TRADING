@@ -7,7 +7,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom Cyberpunk / Dark Green UI matching the exact design layout (CSS)
+# Custom Cyberpunk / Dark Green UI matching your exact requirements (CSS)
 st.markdown("""
     <style>
     .stApp {
@@ -15,47 +15,49 @@ st.markdown("""
         color: #00FF66;
         font-family: 'Courier New', Courier, monospace;
     }
-    .top-badge {
+    .top-pill-badge {
         text-align: center;
         color: #00FF66;
         font-size: 11px;
-        letter-spacing: 2px;
+        letter-spacing: 2.5px;
         background-color: #0d2114;
         border: 1px solid #143d22;
-        padding: 4px 12px;
-        border-radius: 15px;
+        padding: 6px 18px;
+        border-radius: 20px;
         display: inline-block;
-        margin-bottom: 8px;
+        margin-bottom: 12px;
+        font-weight: bold;
     }
     .main-title {
         text-align: center;
         color: #00FF66;
-        font-size: 26px;
+        font-size: 32px;
         font-weight: 900;
-        letter-spacing: 2px;
-        text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
-        margin-bottom: 0px;
-        line-height: 1.2;
-    .sub-title {
+        letter-spacing: 3px;
+        text-shadow: 0 0 15px rgba(0, 255, 102, 0.5);
+        margin-bottom: 5px;
+        line-height: 1.1;
+    }
+    .sub-title-trading {
         text-align: center;
         color: #00FF66;
-        font-size: 26px;
-        font-weight: 900;
-        letter-spacing: 2px;
-        text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
-        margin-bottom: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
     }
-    .sub-text {
+    .sub-text-analytics {
         text-align: center;
         color: #8fa397;
-        font-size: 11px;
-        letter-spacing: 1.5px;
+        font-size: 10px;
+        letter-spacing: 2px;
         margin-bottom: 25px;
     }
     .divider-line {
         width: 100%;
         height: 1px;
-        background-color: #1b4d2e;
+        background-color: #143d22;
         margin: 0 auto 25px auto;
     }
     .card-container {
@@ -138,11 +140,11 @@ if "page" not in st.session_state:
 if "users_db" not in st.session_state:
     st.session_state.users_db = {}
 
-# 3. Header Section (Matching Image Design)
-st.markdown("<div style='text-align: center;'><span class='top-badge'>WELCOME TO</span></div>", unsafe_allow_html=True)
+# 3. Header Section (Your Custom Layout)
+st.markdown("<div style='text-align: center;'><span class='top-pill-badge'>WELCOME TO</span></div>", unsafe_allow_html=True)
 st.markdown("<div class='main-title'>KUSHAL PRO MAX</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-title'>TRADING</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-text'>ADVANCED FINANCIAL ANALYTICS</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-title-trading'>TRADING</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-text-analytics'>ADVANCED FINANCIAL ANALYTICS</div>", unsafe_allow_html=True)
 st.markdown("<div class='divider-line'></div>", unsafe_allow_html=True)
 
 # Container for clean card styling
@@ -194,7 +196,6 @@ with st.container():
         st.markdown("<div class='field-label'>PASSWORD</div>", unsafe_allow_html=True)
         password = st.text_input("PWD_LOGIN", type="password", label_visibility="collapsed", placeholder="••••••••••••")
         
-        # Forgot password alignment
         col_f1, col_f2 = st.columns([2, 1])
         with col_f2:
             if st.button("Forgot Password?", key="forgot_btn"):
@@ -297,7 +298,7 @@ with st.container():
 
     st.markdown("</div>", unsafe_allow_html=True)
 
-# Footer exactly matching the design
+# Footer
 st.markdown("""
     <div class='footer-text'>
         <span>🟢 SYSTEM ONLINE</span>
