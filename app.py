@@ -1,16 +1,24 @@
-import streamlit as st
-
 # ==========================================
-# KUSHAL PRO MAX TRADING
-# PREMIUM DESKTOP INTERFACE
+# HEADER - FIXED HTML RENDERING
 # ==========================================
 
-st.set_page_config(
-    page_title="KUSHAL PRO MAX TRADING",
-    page_icon="⚡",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+st.html("""
+<div class="main-frame">
+
+    <div class="welcome-box">
+        WELCOME TO
+    </div>
+
+    <div class="main-title">
+        KUSHAL PRO MAX TRADING
+    </div>
+
+    <div class="sub-title">
+        ADVANCED FINANCIAL ANALYTICS
+    </div>
+
+</div>
+""")
 
 # ==========================================
 # SESSION
