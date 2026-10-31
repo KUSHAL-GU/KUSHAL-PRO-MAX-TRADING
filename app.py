@@ -1,729 +1,309 @@
 import streamlit as st
-import sqlite3
-import hashlib
-import secrets
-import hmac
-import re
-from pathlib import Path
-from contextlib import closing
 
-# ==================================================
-# KUSHAL PRO MAX TRADING
-# PREMIUM LOGIN SYSTEM - VERSION 2.0
-# ==================================================
-
+# 1. Page Configuration & Futuristic Theme Setup
 st.set_page_config(
-    page_title="KUSHAL PRO MAX TRADING",
+    page_title="Kushal Pro Max Trading",
     page_icon="⚡",
-    layout="centered",
-    initial_sidebar_state="collapsed"
+    layout="centered"
 )
 
-DB_PATH = Path(__file__).with_name("kushal_users.db")
-DEMO_OTP = "1234"
-
-
-# ==================================================
-# DATABASE
-# ==================================================
-
-def database():
-    with closing(sqlite3.connect(DB_PATH)) as conn:
-        with conn:
-            yield conn
-
-
-def initialize_database():
-    with database() as conn:
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                user_id TEXT PRIMARY KEY,
-                password_hash TEXT NOT NULL,
-                salt TEXT NOT NULL,
-                mobile TEXT NOT NULL,
-                recovery_hash TEXT NOT NULL,
-                recovery_salt TEXT NOT NULL
-            )
-        """)
-
-
-def hash_value(value, salt=None):
-    salt = salt or secrets.token_hex(16)
-
-    hashed = hashlib.pbkdf2_hmac(
-        "sha256",
-        value.encode("utf-8"),
-        salt.encode("utf-8"),
-        310000
-    ).hex()
-
-    return hashed, salt
-
-
-def verify_value(value, stored_hash, salt):
-    new_hash, _ = hash_value(value, salt)
-    return hmac.compare_digest(new_hash, stored_hash)
-
-
-def get_user(user_id):
-    uid = user_id.strip().casefold()
-
-    with database() as conn:
-        return conn.execute(
-            "SELECT * FROM users WHERE user_id = ?",
-            (uid,)
-        ).fetchone()
-
-
-def create_user(uid, password, mobile, recovery):
-    password_hash, password_salt = hash_value(password)
-    recovery_hash, recovery_salt = hash_value(recovery)
-
-    with database() as conn:
-        conn.execute("""
-            INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)
-        """, (
-            uid.strip().casefold(),
-            password_hash,
-            password_salt,
-            mobile,
-            recovery_hash,
-            recovery_salt
-        ))
-
-
-initialize_database()
-
-
-# ==================================================
-# SESSION
-# ==================================================
-
-defaults = {
-    "page": "login",
-    "current_user": None,
-    "otp_verified": False
-}
-
-for key, value in defaults.items():
-    if key not in st.session_state:
-        st.session_state[key] = value
-
-
-def navigate(page):
-    st.session_state.page = page
-    st.rerun()
-
-
-# ==================================================
-# PREMIUM BLACK & NEON GREEN THEME
-# ==================================================
-
+# Custom Cyberpunk / Dark Green UI matching the exact design layout (CSS)
 st.markdown("""
-<style>
-
-.stApp {
-    background: #020805 !important;
-    color: #D5EBDD !important;
-    font-family: "Segoe UI", Arial, sans-serif !important;
-}
-
-header[data-testid="stHeader"] {
-    background: transparent !important;
-}
-
-.block-container {
-    max-width: 940px !important;
-    padding: 48px 28px 28px !important;
-    margin: 20px auto !important;
-    background: #050D09 !important;
-    border: 2px solid #19452F !important;
-    border-radius: 32px !important;
-    box-shadow: 0 0 35px #00FF6610 !important;
-}
-
-/* WELCOME */
-
-.welcome {
-    display: table;
-    margin: 0 auto 22px auto;
-    padding: 8px 20px;
-    border-radius: 30px;
-    background: #08291A;
-    color: #42F995;
-    font-size: 23px;
-    letter-spacing: 1px;
-}
-
-/* BRAND NAME */
-
-.main-title {
-    text-align: center;
-    color: #38F58B;
-    font-size: clamp(34px, 6vw, 58px);
-    font-weight: 750;
-    line-height: 1.35;
-    letter-spacing: -1.5px;
-    text-shadow: 0 0 15px #16E87535;
-}
-
-.subtitle {
-    text-align: center;
-    color: #9ABBA7;
-    font-size: 21px;
-    margin: 18px 0 30px;
-    letter-spacing: .3px;
-}
-
-.section-title {
-    color: #40F795;
-    text-align: center;
-    font-size: 36px;
-    font-weight: 650;
-    margin: 0 0 28px;
-}
-
-/* LOGIN PANEL */
-
-div[data-testid="stVerticalBlockBorderWrapper"] {
-    background: #0B1A12 !important;
-    border: 2px solid #24563B !important;
-    border-radius: 26px !important;
-    padding: 18px !important;
-    box-shadow: 0 0 20px #00FF6608 !important;
-}
-
-/* INPUT */
-
-.stTextInput label,
-.stSelectbox label {
-    color: #B3CFBD !important;
-    font-size: 19px !important;
-    font-weight: 500 !important;
-}
-
-.stTextInput input {
-    min-height: 60px !important;
-    background: #14271C !important;
-    color: #E4FFF0 !important;
-    border: 1px solid transparent !important;
-    border-radius: 16px !important;
-    font-size: 19px !important;
-    padding: 12px 18px !important;
-}
-
-.stTextInput input:focus {
-    border: 1px solid #39EF8A !important;
-    box-shadow: 0 0 12px #00FF6630 !important;
-}
-
-/* BUTTONS */
-
-.stButton > button {
-    width: 100% !important;
-    min-height: 62px !important;
-    border-radius: 15px !important;
-    font-size: 19px !important;
-    font-weight: 700 !important;
-    transition: all .25s ease !important;
-}
-
-/* PRIMARY */
-
-.stButton > button[kind="primary"] {
-    background: #16D875 !important;
-    color: #031108 !important;
-    border: none !important;
-    box-shadow: 0 0 15px #16D87520 !important;
-}
-
-.stButton > button[kind="primary"]:hover {
-    background: #40F995 !important;
-    box-shadow: 0 0 24px #16D87565 !important;
-}
-
-/* SECONDARY */
-
-.stButton > button[kind="secondary"] {
-    background: #14271C !important;
-    color: #40F795 !important;
-    border: 1px solid transparent !important;
-}
-
-.stButton > button[kind="secondary"]:hover {
-    background: #1B3828 !important;
-    border: 1px solid #35E987 !important;
-}
-
-hr {
-    border-color: #24563B !important;
-    margin: 25px 0 !important;
-}
-
-.footer {
-    text-align: center;
-    color: #71947E;
-    font-size: 16px;
-    line-height: 2;
-    margin-top: 25px;
-    letter-spacing: .5px;
-}
-
-[data-testid="stAlert"] {
-    border-radius: 14px !important;
-}
-
-/* MOBILE */
-
-@media (max-width: 600px) {
-
-    .block-container {
-        padding: 28px 15px 22px !important;
-        margin: 10px auto !important;
-        border-radius: 24px !important;
+    <style>
+    .stApp {
+        background-color: #070e0a;
+        color: #00FF66;
+        font-family: 'Courier New', Courier, monospace;
     }
-
+    .top-badge {
+        text-align: center;
+        color: #00FF66;
+        font-size: 11px;
+        letter-spacing: 2px;
+        background-color: #0d2114;
+        border: 1px solid #143d22;
+        padding: 4px 12px;
+        border-radius: 15px;
+        display: inline-block;
+        margin-bottom: 8px;
+    }
     .main-title {
-        font-size: 34px !important;
+        text-align: center;
+        color: #00FF66;
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
+        margin-bottom: 0px;
+        line-height: 1.2;
+    .sub-title {
+        text-align: center;
+        color: #00FF66;
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
+        margin-bottom: 10px;
     }
-
-    .subtitle {
-        font-size: 15px !important;
+    .sub-text {
+        text-align: center;
+        color: #8fa397;
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        margin-bottom: 25px;
     }
-
-    .section-title {
-        font-size: 28px !important;
+    .divider-line {
+        width: 100%;
+        height: 1px;
+        background-color: #1b4d2e;
+        margin: 0 auto 25px auto;
     }
-
-    .welcome {
-        font-size: 17px !important;
+    .card-container {
+        background-color: #0b1711;
+        border: 1px solid #143d22;
+        border-radius: 16px;
+        padding: 30px 25px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        margin-bottom: 20px;
     }
-
-    .stTextInput input {
-        min-height: 55px !important;
-        font-size: 17px !important;
+    .section-heading {
+        text-align: center;
+        color: #00FF66;
+        font-size: 18px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
     }
-
-    .stTextInput label {
-        font-size: 17px !important;
+    .field-label {
+        color: #8fa397;
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        margin-bottom: 5px;
+        font-weight: bold;
     }
-
-    .stButton > button {
-        min-height: 55px !important;
-        font-size: 16px !important;
+    div.stButton > button:first-child {
+        background-color: #00FF66;
+        color: #070e0a;
+        font-weight: 900;
+        font-family: 'Courier New', Courier, monospace;
+        letter-spacing: 1px;
+        border: none;
+        width: 100%;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+        margin-top: 10px;
     }
-}
-
-</style>
+    div.stButton > button:first-child:hover {
+        background-color: #00cc52;
+        color: #070e0a;
+        box-shadow: 0 0 20px rgba(0, 255, 102, 0.6);
+    }
+    .secondary-button-wrapper div.stButton > button:first-child {
+        background-color: #0d2114;
+        color: #00FF66;
+        border: 1px solid #143d22;
+    }
+    .secondary-button-wrapper div.stButton > button:first-child:hover {
+        background-color: #143d22;
+        color: #00FF66;
+    }
+    input {
+        background-color: #050f09 !important;
+        color: #00FF66 !important;
+        border: 1px solid #143d22 !important;
+        border-radius: 8px !important;
+    }
+    .footer-text {
+        display: flex;
+        justify-content: space-between;
+        color: #8fa397;
+        font-size: 10px;
+        letter-spacing: 1px;
+        margin-top: 15px;
+    }
+    .footer-bottom {
+        text-align: center;
+        color: #5c7063;
+        font-size: 10px;
+        letter-spacing: 1px;
+        margin-top: 10px;
+    }
+    </style>
 """, unsafe_allow_html=True)
 
+# 2. Session State Initialization
+if "page" not in st.session_state:
+    st.session_state.page = "login"
+if "users_db" not in st.session_state:
+    st.session_state.users_db = {}
 
-# ==================================================
-# HEADER
-# ==================================================
+# 3. Header Section (Matching Image Design)
+st.markdown("<div style='text-align: center;'><span class='top-badge'>WELCOME TO</span></div>", unsafe_allow_html=True)
+st.markdown("<div class='main-title'>KUSHAL PRO MAX</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-title'>TRADING</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-text'>ADVANCED FINANCIAL ANALYTICS</div>", unsafe_allow_html=True)
+st.markdown("<div class='divider-line'></div>", unsafe_allow_html=True)
 
-def show_header():
+# Container for clean card styling
+with st.container():
+    st.markdown("<div class='card-container'>", unsafe_allow_html=True)
 
-    st.markdown(
-        "<div class='welcome'>WELCOME TO</div>",
-        unsafe_allow_html=True
-    )
+    # ----------------- REGISTRATION SCREEN -----------------
+    if st.session_state.page == "register":
+        st.markdown("<div class='section-heading'>CREATE ACCOUNT</div>", unsafe_allow_html=True)
+        
+        st.markdown("<div class='field-label'>USER ID</div>", unsafe_allow_html=True)
+        new_user_id = st.text_input("UID_REG", label_visibility="collapsed", placeholder="Choose your User ID")
+        
+        st.markdown("<div class='field-label'>PASSWORD</div>", unsafe_allow_html=True)
+        new_password = st.text_input("PWD_REG", type="password", label_visibility="collapsed", placeholder="Set secure password")
+        
+        st.markdown("<div class='field-label'>MOBILE NUMBER</div>", unsafe_allow_html=True)
+        new_mobile = st.text_input("MOB_REG", label_visibility="collapsed", placeholder="Enter mobile number")
+        
+        st.markdown("<div class='field-label'>KDS VERIFICATION CODE</div>", unsafe_allow_html=True)
+        kds_info = st.text_input("KDS_REG", label_visibility="collapsed", placeholder="Enter KDS identification code")
+        
+        if st.button("REGISTER ACCOUNT →"):
+            if new_user_id and new_password and new_mobile:
+                st.session_state.users_db[new_user_id] = {
+                    "password": new_password,
+                    "mobile": new_mobile,
+                    "kds": kds_info
+                }
+                st.success("✅ ACCOUNT CREATED SUCCESSFULLY.")
+                st.session_state.page = "login"
+                st.rerun()
+            else:
+                st.error("❌ ERROR: FILL ALL REQUIRED FIELDS!")
+                
+        st.markdown("<div class='secondary-button-wrapper'>", unsafe_allow_html=True)
+        if st.button("← BACK TO LOGIN"):
+            st.session_state.page = "login"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown(
-        "<div class='main-title'>"
-        "KUSHAL PRO MAX<br>TRADING"
-        "</div>",
-        unsafe_allow_html=True
-    )
+    # ----------------- LOGIN SCREEN -----------------
+    elif st.session_state.page == "login":
+        st.markdown("<div class='section-heading'>SECURE LOGIN</div>", unsafe_allow_html=True)
+        
+        st.markdown("<div class='field-label'>USER ID</div>", unsafe_allow_html=True)
+        user_id = st.text_input("UID_LOGIN", label_visibility="collapsed", placeholder="Enter your User ID")
+        
+        st.markdown("<div class='field-label'>PASSWORD</div>", unsafe_allow_html=True)
+        password = st.text_input("PWD_LOGIN", type="password", label_visibility="collapsed", placeholder="••••••••••••")
+        
+        # Forgot password alignment
+        col_f1, col_f2 = st.columns([2, 1])
+        with col_f2:
+            if st.button("Forgot Password?", key="forgot_btn"):
+                st.session_state.page = "forgot"
+                st.rerun()
 
-    st.markdown(
-        "<div class='subtitle'>"
-        "ADVANCED FINANCIAL ANALYTICS"
-        "</div>",
-        unsafe_allow_html=True
-    )
+        if st.button("SECURE LOGIN →"):
+            if user_id in st.session_state.users_db and st.session_state.users_db[user_id]["password"] == password:
+                st.session_state.page = "otp"
+                st.session_state.current_user = user_id
+                st.rerun()
+            else:
+                st.error("❌ ACCESS DENIED: INVALID CREDENTIALS!")
+                
+        st.markdown("<div class='secondary-button-wrapper'>", unsafe_allow_html=True)
+        if st.button("+ CREATE ACCOUNT"):
+            st.session_state.page = "register"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+        st.markdown("<div style='text-align: center; margin-top: 15px;'><span style='color: #8fa397; font-size: 11px;'>NEW USER? REGISTER YOUR ACCOUNT</span></div>", unsafe_allow_html=True)
 
-    st.markdown(
-        "<hr style='width:55%;border:1px solid #38F58B;margin:auto;'>",
-        unsafe_allow_html=True
-    )
+    # ----------------- OTP SCREEN -----------------
+    elif st.session_state.page == "otp":
+        st.markdown("<div class='section-heading'>TWO-FACTOR AUTH</div>", unsafe_allow_html=True)
+        user = st.session_state.current_user
+        mobile = st.session_state.users_db[user]["mobile"]
+        
+        st.info(f"OTP DISPATCHED TO (*{mobile[-4:]}). [DEMO OTP: 1234]")
+        
+        st.markdown("<div class='field-label'>ENTER 4-DIGIT OTP</div>", unsafe_allow_html=True)
+        otp_input = st.text_input("OTP_INPUT", type="password", label_visibility="collapsed", placeholder="1234")
+        
+        if st.button("VERIFY & LAUNCH →"):
+            if otp_input == "1234":
+                st.session_state.page = "dashboard"
+                st.rerun()
+            else:
+                st.error("❌ AUTHENTICATION FAILED: INVALID OTP!")
 
+    # ----------------- RECOVERY SCREEN -----------------
+    elif st.session_state.page == "forgot":
+        st.markdown("<div class='section-heading'>SYSTEM RECOVERY</div>", unsafe_allow_html=True)
+        
+        st.markdown("<div class='field-label'>SELECT RECOVERY MODE</div>", unsafe_allow_html=True)
+        option = st.selectbox("REC_MODE", ["RESET PASSWORD", "RETRIEVE USER ID", "RETRIEVE MOBILE NUMBER"], label_visibility="collapsed")
+        
+        if option == "RESET PASSWORD":
+            st.markdown("<div class='field-label'>USER ID</div>", unsafe_allow_html=True)
+            u_id = st.text_input("R_UID", label_visibility="collapsed", placeholder="Enter User ID")
+            st.markdown("<div class='field-label'>KDS CODE</div>", unsafe_allow_html=True)
+            kds_in = st.text_input("R_KDS", label_visibility="collapsed", placeholder="Enter KDS Code")
+            if st.button("EXECUTE RESET →"):
+                if u_id in st.session_state.users_db and st.session_state.users_db[u_id]["kds"] == kds_in:
+                    st.success(f"PASSWORD: {st.session_state.users_db[u_id]['password']}")
+                else:
+                    st.error("❌ VERIFICATION FAILED!")
+                    
+        elif option == "RETRIEVE USER ID":
+            st.markdown("<div class='field-label'>MOBILE NUMBER</div>", unsafe_allow_html=True)
+            mob = st.text_input("R_MOB", label_visibility="collapsed", placeholder="Enter Mobile Number")
+            st.markdown("<div class='field-label'>KDS CODE</div>", unsafe_allow_html=True)
+            kds_in = st.text_input("R_KDS2", label_visibility="collapsed", placeholder="Enter KDS Code")
+            if st.button("FETCH USER ID →"):
+                found = False
+                for uid, data in st.session_state.users_db.items():
+                    if data["mobile"] == mob and data["kds"] == kds_in:
+                        st.success(f"USER ID: {uid}")
+                        found = True
+                        break
+                if not found:
+                    st.error("❌ NO MATCH FOUND!")
+                    
+        elif option == "RETRIEVE MOBILE NUMBER":
+            st.markdown("<div class='field-label'>USER ID</div>", unsafe_allow_html=True)
+            u_id = st.text_input("R_UID2", label_visibility="collapsed", placeholder="Enter User ID")
+            st.markdown("<div class='field-label'>PASSWORD</div>", unsafe_allow_html=True)
+            pwd = st.text_input("R_PWD", type="password", label_visibility="collapsed", placeholder="Enter Password")
+            if st.button("FETCH MOBILE →"):
+                if u_id in st.session_state.users_db and st.session_state.users_db[u_id]["password"] == pwd:
+                    st.success(f"MOBILE: {st.session_state.users_db[u_id]['mobile']}")
+                else:
+                    st.error("❌ INVALID CREDENTIALS!")
 
-def show_footer():
+        st.markdown("<div class='secondary-button-wrapper'>", unsafe_allow_html=True)
+        if st.button("← RETURN TO LOGIN"):
+            st.session_state.page = "login"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("""
-    <div style="
-        display:flex;
-        justify-content:space-between;
-        color:#80B99A;
-        font-size:14px;
-        margin-top:25px;
-        gap:10px;
-        flex-wrap:wrap;
-    ">
-        <span>● SYSTEM ONLINE</span>
+    # ----------------- DASHBOARD -----------------
+    elif st.session_state.page == "dashboard":
+        st.markdown(f"<div class='section-heading'>TERMINAL ACTIVE</div>", unsafe_allow_html=True)
+        st.success(f"🚀 WELCOME, {st.session_state.current_user.upper()}! ENGINE ONLINE.")
+        st.markdown("<div class='secondary-button-wrapper'>", unsafe_allow_html=True)
+        if st.button("DISCONNECT / LOGOUT"):
+            st.session_state.page = "login"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# Footer exactly matching the design
+st.markdown("""
+    <div class='footer-text'>
+        <span>🟢 SYSTEM ONLINE</span>
         <span>ENCRYPTED ACCESS</span>
     </div>
-
-    <div class="footer">
+    <div class='footer-bottom'>
         KUSHAL PRO MAX © 2026
     </div>
-    """, unsafe_allow_html=True)
-
-
-show_header()
-
-
-# ==================================================
-# LOGIN PAGE
-# ==================================================
-
-if st.session_state.page == "login":
-
-    st.markdown(
-        "<div class='section-title'>SECURE LOGIN</div>",
-        unsafe_allow_html=True
-    )
-
-    with st.container(border=True):
-
-        user_id = st.text_input(
-            "USER ID",
-            placeholder="Enter your User ID",
-            key="login_user"
-        )
-
-        password = st.text_input(
-            "PASSWORD",
-            type="password",
-            placeholder="Enter your password",
-            key="login_password"
-        )
-
-        col1, col2 = st.columns([1, 1])
-
-        with col2:
-            if st.button("Forgot Password?"):
-                navigate("forgot")
-
-        if st.button("SECURE LOGIN →", type="primary"):
-
-            user = get_user(user_id)
-
-            if user and verify_value(password, user[1], user[2]):
-
-                st.session_state.current_user = user[0]
-                st.session_state.otp_verified = False
-                navigate("otp")
-
-            else:
-                st.error("INVALID USER ID OR PASSWORD")
-
-        if st.button("+ CREATE ACCOUNT"):
-
-            navigate("register")
-
-        st.markdown(
-            "<p style='text-align:center;color:#8FAF9B;'>"
-            "NEW USER? REGISTER YOUR ACCOUNT"
-            "</p>",
-            unsafe_allow_html=True
-        )
-
-
-# ==================================================
-# REGISTRATION
-# ==================================================
-
-elif st.session_state.page == "register":
-
-    st.markdown(
-        "<div class='section-title'>CREATE ACCOUNT</div>",
-        unsafe_allow_html=True
-    )
-
-    with st.container(border=True):
-
-        uid = st.text_input("CREATE USER ID")
-
-        pwd = st.text_input(
-            "CREATE PASSWORD",
-            type="password"
-        )
-
-        confirm = st.text_input(
-            "CONFIRM PASSWORD",
-            type="password"
-        )
-
-        mobile = st.text_input(
-            "MOBILE NUMBER",
-            max_chars=10
-        )
-
-        recovery = st.text_input(
-            "CREATE RECOVERY CODE",
-            type="password"
-        )
-
-        st.caption(
-            "Keep your recovery code safe. "
-            "It will be needed for account recovery."
-        )
-
-        if st.button("REGISTER ACCOUNT →", type="primary"):
-
-            if not all([uid.strip(), pwd, confirm, mobile, recovery]):
-                st.error("PLEASE FILL ALL REQUIRED FIELDS")
-
-            elif not re.fullmatch(r"[A-Za-z0-9_.-]{4,30}", uid.strip()):
-                st.error("USER ID MUST BE 4-30 CHARACTERS")
-
-            elif len(pwd) < 8:
-                st.error("PASSWORD MUST HAVE AT LEAST 8 CHARACTERS")
-
-            elif pwd != confirm:
-                st.error("PASSWORDS DO NOT MATCH")
-
-            elif not re.fullmatch(r"[0-9]{10}", mobile.strip()):
-                st.error("ENTER VALID 10-DIGIT MOBILE NUMBER")
-
-            elif len(recovery) < 6:
-                st.error("RECOVERY CODE MUST HAVE AT LEAST 6 CHARACTERS")
-
-            elif get_user(uid):
-                st.error("USER ID ALREADY EXISTS")
-
-            else:
-                try:
-                    create_user(uid, pwd, mobile.strip(), recovery)
-                    st.success("ACCOUNT CREATED SUCCESSFULLY!")
-                    navigate("login")
-
-                except sqlite3.IntegrityError:
-                    st.error("USER ID ALREADY EXISTS")
-
-        if st.button("← BACK TO LOGIN"):
-            navigate("login")
-
-
-# ==================================================
-# OTP PAGE
-# ==================================================
-
-elif st.session_state.page == "otp":
-
-    user = get_user(st.session_state.current_user or "")
-
-    if not user:
-        st.session_state.current_user = None
-        navigate("login")
-
-    st.markdown(
-        "<div class='section-title'>SECURITY VERIFICATION</div>",
-        unsafe_allow_html=True
-    )
-
-    st.info(
-        f"DEMO OTP: {DEMO_OTP} | MOBILE ENDING: {user[3][-4:]}"
-    )
-
-    otp = st.text_input(
-        "ENTER 4-DIGIT OTP",
-        type="password",
-        max_chars=4
-    )
-
-    if st.button("VERIFY & LAUNCH TERMINAL →", type="primary"):
-
-        if hmac.compare_digest(otp, DEMO_OTP):
-            st.session_state.otp_verified = True
-            navigate("dashboard")
-        else:
-            st.error("INVALID OTP")
-
-    if st.button("CANCEL LOGIN"):
-        st.session_state.current_user = None
-        st.session_state.otp_verified = False
-        navigate("login")
-
-
-# ==================================================
-# FORGOT PASSWORD & RECOVERY
-# ==================================================
-
-elif st.session_state.page == "forgot":
-
-    st.markdown(
-        "<div class='section-title'>ACCOUNT RECOVERY</div>",
-        unsafe_allow_html=True
-    )
-
-    with st.container(border=True):
-
-        option = st.selectbox(
-            "SELECT RECOVERY OPTION",
-            [
-                "RESET PASSWORD",
-                "RETRIEVE USER ID",
-                "RETRIEVE MOBILE NUMBER"
-            ]
-        )
-
-        st.markdown("---")
-
-        if option == "RESET PASSWORD":
-
-            uid = st.text_input("ENTER USER ID")
-
-            recovery = st.text_input(
-                "ENTER RECOVERY CODE",
-                type="password"
-            )
-
-            new_pwd = st.text_input(
-                "NEW PASSWORD",
-                type="password"
-            )
-
-            confirm_pwd = st.text_input(
-                "CONFIRM NEW PASSWORD",
-                type="password"
-            )
-
-            if st.button("RESET PASSWORD →", type="primary"):
-
-                user = get_user(uid)
-
-                if not user or not verify_value(recovery, user[4], user[5]):
-                    st.error("INVALID USER ID OR RECOVERY CODE")
-
-                elif len(new_pwd) < 8:
-                    st.error("PASSWORD MUST HAVE 8 CHARACTERS")
-
-                elif new_pwd != confirm_pwd:
-                    st.error("PASSWORDS DO NOT MATCH")
-
-                else:
-                    new_hash, new_salt = hash_value(new_pwd)
-
-                    with database() as conn:
-                        conn.execute("""
-                            UPDATE users
-                            SET password_hash = ?, salt = ?
-                            WHERE user_id = ?
-                        """, (new_hash, new_salt, user[0]))
-
-                    st.success("PASSWORD UPDATED SUCCESSFULLY!")
-                    navigate("login")
-
-        elif option == "RETRIEVE USER ID":
-
-            mobile_input = st.text_input("REGISTERED MOBILE NUMBER")
-
-            recovery = st.text_input(
-                "RECOVERY CODE",
-                type="password"
-            )
-
-            if st.button("RETRIEVE USER ID →", type="primary"):
-
-                with database() as conn:
-                    users = conn.execute(
-                        "SELECT * FROM users WHERE mobile = ?",
-                        (mobile_input.strip(),)
-                    ).fetchall()
-
-                found = None
-
-                for user in users:
-                    if verify_value(recovery, user[4], user[5]):
-                        found = user[0]
-                        break
-
-                if found:
-                    st.success(f"YOUR USER ID: {found}")
-                else:
-                    st.error("ACCOUNT NOT FOUND")
-
-        elif option == "RETRIEVE MOBILE NUMBER":
-
-            uid = st.text_input("ENTER USER ID")
-
-            pwd = st.text_input(
-                "ENTER PASSWORD",
-                type="password"
-            )
-
-            if st.button("RETRIEVE MOBILE →", type="primary"):
-
-                user = get_user(uid)
-
-                if user and verify_value(pwd, user[1], user[2]):
-                    st.success(
-                        f"REGISTERED MOBILE: ******{user[3][-4:]}"
-                    )
-                else:
-                    st.error("INVALID USER ID OR PASSWORD")
-
-        if st.button("← RETURN TO LOGIN"):
-            navigate("login")
-
-
-# ==================================================
-# DASHBOARD
-# ==================================================
-
-elif st.session_state.page == "dashboard":
-
-    if (
-        not st.session_state.current_user
-        or not st.session_state.otp_verified
-        or not get_user(st.session_state.current_user)
-    ):
-        st.session_state.current_user = None
-        st.session_state.otp_verified = False
-        navigate("login")
-
-    st.success(
-        f"TERMINAL ACTIVE: "
-        f"{st.session_state.current_user.upper()}"
-    )
-
-    st.markdown(
-        "<div class='section-title'>"
-        "TRADING DASHBOARD"
-        "</div>",
-        unsafe_allow_html=True
-    )
-
-    with st.container(border=True):
-
-        st.markdown("""
-        <h2 style="text-align:center;color:#40F795;">
-            KUSHAL PRO MAX ENGINE
-        </h2>
-        <p style="text-align:center;color:#9ABBA7;">
-            ADVANCED FINANCIAL ANALYTICS
-        </p>
-        <p style="text-align:center;color:#40F795;">
-            ● AUTHENTICATED SESSION ACTIVE
-        </p>
-        """, unsafe_allow_html=True)
-
-        st.info(
-            "TRADING DASHBOARD MODULES WILL BE ADDED IN THE NEXT VERSION."
-        )
-
-        if st.button("DISCONNECT / LOGOUT", type="primary"):
-
-            st.session_state.current_user = None
-            st.session_state.otp_verified = False
-            navigate("login")
-
-
-# ==================================================
-# FOOTER
-# ==================================================
-
-show_footer()
+""", unsafe_allow_html=True)
