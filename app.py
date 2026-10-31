@@ -1,24 +1,16 @@
+import streamlit as st
+
 # ==========================================
-# HEADER - FIXED HTML RENDERING
+# KUSHAL PRO MAX TRADING
+# PREMIUM DESKTOP INTERFACE
 # ==========================================
 
-st.html("""
-<div class="main-frame">
-
-    <div class="welcome-box">
-        WELCOME TO
-    </div>
-
-    <div class="main-title">
-        KUSHAL PRO MAX TRADING
-    </div>
-
-    <div class="sub-title">
-        ADVANCED FINANCIAL ANALYTICS
-    </div>
-
-</div>
-""")
+st.set_page_config(
+    page_title="KUSHAL PRO MAX TRADING",
+    page_icon="⚡",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
 # ==========================================
 # SESSION
@@ -37,101 +29,146 @@ if "users_db" not in st.session_state:
 st.markdown("""
 <style>
 
+/* MAIN BACKGROUND */
+
 .stApp {
-    background: #020805;
-    color: #00A94F;
+    background: #020805 !important;
+    color: #00A94F !important;
     font-family: 'Segoe UI', Arial, sans-serif;
 }
 
-/* PAGE LAYOUT FIX */
+/* FULL PAGE LAYOUT */
 
 .block-container {
     max-width: 950px !important;
-    padding: 45px 20px 30px !important;
+    width: 100% !important;
+    padding: 12px 20px 15px !important;
+    margin: auto !important;
     box-sizing: border-box !important;
 }
 
-/* MAIN OUTER BOX */
+/* REDUCE VERTICAL SPACING */
+
+div[data-testid="stVerticalBlock"] {
+    gap: 0.65rem;
+}
+
+/* MAIN OUTER HEADER BOX */
 
 .main-frame {
     display: block !important;
     width: 100% !important;
+    min-height: 135px !important;
     box-sizing: border-box !important;
+
     background: #050D09 !important;
-    border: 2px solid #174B30 !important;
-    border-radius: 20px !important;
-    padding: 25px 20px !important;
-    margin-top: 10px !important;
-    margin-bottom: 15px !important;
-    min-height: 150px !important;
-    box-shadow: 0 0 25px #00FF6610 !important;
+
+    border: 2px solid #17683B !important;
+    border-radius: 18px !important;
+
+    padding: 17px 15px !important;
+    margin: 0 0 12px 0 !important;
+
+    box-shadow: 0 0 22px #00FF6615 !important;
+
     text-align: center !important;
     overflow: visible !important;
 }
 
-/* WELCOME */
+/* WELCOME BOX */
 
 .welcome-box {
     display: inline-block !important;
+
     background: #092318 !important;
+
     border: 1px solid #00E875 !important;
     border-radius: 30px !important;
-    padding: 8px 24px !important;
+
+    padding: 6px 22px !important;
+
     color: #00E875 !important;
-    font-size: 14px !important;
+
+    font-size: 13px !important;
     font-weight: 700 !important;
     letter-spacing: 2px !important;
-    margin-bottom: 12px !important;
+
+    margin-bottom: 7px !important;
 }
 
 /* BRAND TITLE */
 
 .main-title {
-    color: #00F080;
-    text-align: center;
-    font-size: 26px;
-    font-weight: 750;
-    letter-spacing: 1px;
-    margin-top: 5px;
-    text-shadow: 0 0 15px #00E87535;
+    display: block !important;
+
+    color: #00F080 !important;
+
+    text-align: center !important;
+
+    font-size: 26px !important;
+    font-weight: 750 !important;
+
+    letter-spacing: 1px !important;
+
+    margin: 4px 0 !important;
+
+    text-shadow: 0 0 15px #00E87535 !important;
 }
 
+/* SUB TITLE */
+
 .sub-title {
-    color: #008F49;
-    font-size: 14px;
-    font-weight: 600;
-    text-align: center;
-    letter-spacing: 2px;
-    margin-top: 6px;
-    margin-bottom: 5px;
+    display: block !important;
+
+    color: #00B85B !important;
+
+    font-size: 13px !important;
+    font-weight: 600 !important;
+
+    text-align: center !important;
+    letter-spacing: 2px !important;
+
+    margin-top: 5px !important;
+    margin-bottom: 2px !important;
 }
 
 /* SECTION HEADING BOX */
 
 .heading-box {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    background: #0B2015;
-    border: 1px solid #17683B;
-    border-radius: 12px;
-    padding: 10px;
-    text-align: center;
-    margin-bottom: 15px;
-    color: #00E875;
-    font-size: 18px;
-    font-weight: 750;
-    letter-spacing: 2px;
+    display: block !important;
+
+    width: 100% !important;
+    box-sizing: border-box !important;
+
+    background: #0B2015 !important;
+
+    border: 1px solid #00A94F !important;
+    border-radius: 11px !important;
+
+    padding: 9px !important;
+
+    text-align: center !important;
+
+    margin-bottom: 10px !important;
+
+    color: #00E875 !important;
+
+    font-size: 17px !important;
+    font-weight: 750 !important;
+    letter-spacing: 2px !important;
 }
 
 /* CONTENT PANEL */
 
 div[data-testid="stVerticalBlockBorderWrapper"] {
-    background: #09170F;
-    border: 2px solid #174B30;
-    border-radius: 18px;
-    padding: 18px;
-    box-shadow: 0 0 18px #00FF6608;
+    background: #09170F !important;
+
+    border: 1px solid #174B30 !important;
+    border-radius: 15px !important;
+
+    padding: 13px !important;
+
+    box-shadow: 0 0 18px #00FF6608 !important;
 }
 
 /* INPUT LABEL */
@@ -139,21 +176,29 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 .stTextInput label,
 .stSelectbox label {
     color: #00C968 !important;
-    font-size: 14px !important;
+
+    font-size: 13px !important;
     font-weight: 700 !important;
-    letter-spacing: 1px;
+
+    letter-spacing: 1px !important;
 }
 
 /* INPUT BOX */
 
 .stTextInput input {
     background: #10271A !important;
+
     color: #00F080 !important;
+
     border: 1px solid #17683B !important;
-    border-radius: 10px !important;
-    min-height: 42px !important;
-    padding: 10px 15px !important;
-    font-size: 15px !important;
+    border-radius: 9px !important;
+
+    min-height: 38px !important;
+
+    padding: 8px 13px !important;
+
+    font-size: 14px !important;
+
     width: 100% !important;
 }
 
@@ -163,6 +208,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 
 .stTextInput input:focus {
     border: 2px solid #00E875 !important;
+
     box-shadow: 0 0 12px #00E87530 !important;
 }
 
@@ -170,26 +216,35 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 
 .stSelectbox div[data-baseweb="select"] {
     background: #10271A !important;
+
     color: #00E875 !important;
+
     border: 1px solid #17683B !important;
-    border-radius: 10px !important;
-    min-height: 42px;
+    border-radius: 9px !important;
+
+    min-height: 38px !important;
 }
 
 /* ALL BUTTONS */
 
 .stButton {
-    width: 100%;
+    width: 100% !important;
 }
 
 .stButton button {
     width: 100% !important;
-    min-height: 42px !important;
-    border-radius: 10px !important;
-    font-size: 14px !important;
+
+    min-height: 38px !important;
+
+    border-radius: 9px !important;
+
+    font-size: 13px !important;
     font-weight: 700 !important;
+
     letter-spacing: 1px !important;
+
     transition: 0.25s ease !important;
+
     border: 1px solid #17683B !important;
 }
 
@@ -197,13 +252,17 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 
 .stButton button[kind="primary"] {
     background: #00D875 !important;
+
     color: #031008 !important;
+
     border: 1px solid #00F080 !important;
+
     box-shadow: 0 0 15px #00D87525 !important;
 }
 
 .stButton button[kind="primary"]:hover {
     background: #00FF88 !important;
+
     box-shadow: 0 0 25px #00FF8860 !important;
 }
 
@@ -211,12 +270,15 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 
 .stButton button[kind="secondary"] {
     background: #10271A !important;
+
     color: #00E875 !important;
 }
 
 .stButton button[kind="secondary"]:hover {
     background: #173B27 !important;
+
     border: 1px solid #00E875 !important;
+
     color: #00FF91 !important;
 }
 
@@ -227,28 +289,70 @@ div[data-testid="stAlert"] {
 }
 
 .stAlert p {
-    font-size: 14px !important;
+    font-size: 13px !important;
 }
 
 /* FOOTER */
 
 .footer-box {
-    background: #08180F;
-    border: 1px solid #174B30;
-    border-radius: 10px;
-    padding: 10px;
-    text-align: center;
-    color: #008F49;
-    font-size: 12px;
-    letter-spacing: 2px;
-    margin-top: 15px;
+    display: block !important;
+
+    width: 100% !important;
+    box-sizing: border-box !important;
+
+    background: #08180F !important;
+
+    border: 1px solid #174B30 !important;
+    border-radius: 10px !important;
+
+    padding: 9px !important;
+
+    text-align: center !important;
+
+    color: #00A94F !important;
+
+    font-size: 11px !important;
+    letter-spacing: 1.5px !important;
+
+    margin-top: 12px !important;
 }
 
 /* DIVIDER */
 
 hr {
     border-color: #17683B !important;
-    margin: 15px 0 !important;
+    margin: 10px 0 !important;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media screen and (max-width: 768px) {
+
+    .block-container {
+        padding: 12px 12px 20px !important;
+    }
+
+    .main-frame {
+        min-height: 120px !important;
+        padding: 15px 10px !important;
+    }
+
+    .main-title {
+        font-size: 21px !important;
+    }
+
+    .sub-title {
+        font-size: 11px !important;
+    }
+
+    .heading-box {
+        font-size: 15px !important;
+    }
+
+    .footer-box {
+        font-size: 9px !important;
+        letter-spacing: 1px !important;
+    }
 }
 
 </style>
@@ -286,7 +390,7 @@ if st.session_state.page == "login":
 
     st.markdown("""
     <div class="heading-box">
-    SECURE LOGIN
+        SECURE LOGIN
     </div>
     """, unsafe_allow_html=True)
 
@@ -317,20 +421,22 @@ if st.session_state.page == "login":
                 st.error("INVALID USER ID OR PASSWORD")
 
         if st.button("FORGOT PASSWORD?"):
+
             st.session_state.page = "forgot"
             st.rerun()
 
         if st.button("+ CREATE NEW ACCOUNT"):
+
             st.session_state.page = "register"
             st.rerun()
 
         st.markdown("""
         <p style="
         text-align:center;
-        color:#008F49;
-        font-size:13px;
+        color:#00B85B;
+        font-size:12px;
         letter-spacing:1px;
-        margin-top: 5px;">
+        margin-top:5px;">
         NEW USER? REGISTER YOUR ACCOUNT
         </p>
         """, unsafe_allow_html=True)
@@ -344,7 +450,7 @@ elif st.session_state.page == "register":
 
     st.markdown("""
     <div class="heading-box">
-    CREATE NEW ACCOUNT
+        CREATE NEW ACCOUNT
     </div>
     """, unsafe_allow_html=True)
 
@@ -405,6 +511,7 @@ elif st.session_state.page == "register":
                 st.error("RECOVERY CODE MUST BE AT LEAST 6 CHARACTERS")
 
             else:
+
                 st.session_state.users_db[new_user_id] = {
                     "password": new_password,
                     "mobile": new_mobile,
@@ -417,6 +524,7 @@ elif st.session_state.page == "register":
                 st.rerun()
 
         if st.button("← BACK TO LOGIN"):
+
             st.session_state.page = "login"
             st.rerun()
 
@@ -429,11 +537,12 @@ elif st.session_state.page == "otp":
 
     st.markdown("""
     <div class="heading-box">
-    TWO FACTOR AUTHENTICATION
+        TWO FACTOR AUTHENTICATION
     </div>
     """, unsafe_allow_html=True)
 
     user = st.session_state.current_user
+
     mobile = st.session_state.users_db[user]["mobile"]
 
     with st.container(border=True):
@@ -447,9 +556,13 @@ elif st.session_state.page == "otp":
             type="password"
         )
 
-        if st.button("VERIFY & LAUNCH TERMINAL →", type="primary"):
+        if st.button(
+            "VERIFY & LAUNCH TERMINAL →",
+            type="primary"
+        ):
 
             if otp_input == "1234":
+
                 st.session_state.page = "dashboard"
                 st.rerun()
 
@@ -457,6 +570,7 @@ elif st.session_state.page == "otp":
                 st.error("INVALID OTP")
 
         if st.button("CANCEL LOGIN"):
+
             st.session_state.page = "login"
             st.rerun()
 
@@ -469,7 +583,7 @@ elif st.session_state.page == "forgot":
 
     st.markdown("""
     <div class="heading-box">
-    ACCOUNT RECOVERY
+        ACCOUNT RECOVERY
     </div>
     """, unsafe_allow_html=True)
 
@@ -513,13 +627,19 @@ elif st.session_state.page == "forgot":
                 ):
 
                     if len(new_pwd) < 8:
-                        st.error("PASSWORD MUST BE AT LEAST 8 CHARACTERS")
+
+                        st.error(
+                            "PASSWORD MUST BE AT LEAST 8 CHARACTERS"
+                        )
 
                     elif new_pwd != confirm_pwd:
+
                         st.error("PASSWORDS DO NOT MATCH")
 
                     else:
+
                         st.session_state.users_db[u_id]["password"] = new_pwd
+
                         st.success("PASSWORD RESET SUCCESSFULLY")
 
                 else:
@@ -540,9 +660,13 @@ elif st.session_state.page == "forgot":
 
                 for uid, data in st.session_state.users_db.items():
 
-                    if data["mobile"] == mob and data["kds"] == kds_in:
+                    if (
+                        data["mobile"] == mob
+                        and data["kds"] == kds_in
+                    ):
 
                         st.success(f"YOUR USER ID: {uid}")
+
                         found = True
                         break
 
@@ -558,7 +682,10 @@ elif st.session_state.page == "forgot":
                 type="password"
             )
 
-            if st.button("RETRIEVE MOBILE NUMBER →", type="primary"):
+            if st.button(
+                "RETRIEVE MOBILE NUMBER →",
+                type="primary"
+            ):
 
                 if (
                     u_id in st.session_state.users_db
@@ -567,12 +694,15 @@ elif st.session_state.page == "forgot":
 
                     mobile = st.session_state.users_db[u_id]["mobile"]
 
-                    st.success(f"REGISTERED MOBILE: ******{mobile[-4:]}")
+                    st.success(
+                        f"REGISTERED MOBILE: ******{mobile[-4:]}"
+                    )
 
                 else:
                     st.error("INVALID USER ID OR PASSWORD")
 
         if st.button("← RETURN TO LOGIN"):
+
             st.session_state.page = "login"
             st.rerun()
 
@@ -585,7 +715,7 @@ elif st.session_state.page == "dashboard":
 
     st.markdown("""
     <div class="heading-box">
-    TRADING DASHBOARD
+        TRADING DASHBOARD
     </div>
     """, unsafe_allow_html=True)
 
@@ -603,11 +733,11 @@ elif st.session_state.page == "dashboard":
         padding:20px;
         text-align:center;">
 
-        <h2 style="color:#00F080; margin-bottom: 5px;">
+        <h2 style="color:#00F080; margin-bottom:5px;">
         KUSHAL PRO MAX ENGINE
         </h2>
 
-        <p style="color:#008F49; font-size:16px; margin-bottom: 5px;">
+        <p style="color:#008F49; font-size:16px; margin-bottom:5px;">
         ADVANCED FINANCIAL ANALYTICS
         </p>
 
@@ -631,6 +761,6 @@ elif st.session_state.page == "dashboard":
 
 st.markdown("""
 <div class="footer-box">
-● SYSTEM ONLINE | KUSHAL PRO MAX TRADING © 2026 | PREMIUM FINANCIAL TERMINAL
+    ● SYSTEM ONLINE | KUSHAL PRO MAX TRADING © 2026 | PREMIUM FINANCIAL TERMINAL
 </div>
 """, unsafe_allow_html=True)
