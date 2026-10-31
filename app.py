@@ -2,7 +2,7 @@ import streamlit as st
 
 # ==========================================
 # KUSHAL PRO MAX TRADING
-# COMPACT PREMIUM DESKTOP INTERFACE
+# PREMIUM DESKTOP INTERFACE
 # ==========================================
 
 st.set_page_config(
@@ -36,35 +36,34 @@ st.markdown("""
 }
 
 .block-container {
-    max-width: 1100px !important;
-    padding: 20px 35px 35px !important;
+    max-width: 950px !important;
+    padding: 20px 20px 30px !important;
 }
 
-/* MAIN HEADER BOX */
+/* MAIN OUTER BOX */
 
 .main-frame {
-    width: 100%;
     background: #050D09;
-    border: 1px solid #17683B;
-    border-radius: 18px;
-    padding: 13px 25px 15px;
-    box-shadow: 0 0 18px #00FF6610;
-    text-align: center;
+    border: 2px solid #174B30;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 25px #00FF6610;
 }
 
 /* WELCOME */
 
 .welcome-box {
-    display: inline-block;
     background: #092318;
     border: 1px solid #17683B;
     border-radius: 30px;
-    padding: 6px 24px;
-    margin: 0 auto;
+    padding: 8px 25px;
+    width: fit-content;
+    margin: auto;
     color: #00E875;
-    font-size: 14px;
-    font-weight: 650;
+    font-size: 15px;
+    font-weight: 600;
     letter-spacing: 2px;
+    text-align: center;
 }
 
 /* BRAND TITLE */
@@ -73,22 +72,20 @@ st.markdown("""
     color: #00F080;
     text-align: center;
     font-size: 26px;
-    line-height: 1.25;
     font-weight: 750;
     letter-spacing: 1px;
-    margin-top: 9px;
-    text-shadow: 0 0 12px #00E87535;
-    white-space: nowrap;
+    margin-top: 12px;
+    text-shadow: 0 0 15px #00E87535;
 }
 
 .sub-title {
     color: #008F49;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     text-align: center;
     letter-spacing: 2px;
-    margin-top: 5px;
-    margin-bottom: 0;
+    margin-top: 6px;
+    margin-bottom: 15px;
 }
 
 /* SECTION HEADING BOX */
@@ -97,24 +94,23 @@ st.markdown("""
     background: #0B2015;
     border: 1px solid #17683B;
     border-radius: 12px;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     color: #00E875;
-    font-size: 21px;
+    font-size: 20px;
     font-weight: 750;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
 }
 
 /* CONTENT PANEL */
 
 div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #09170F;
-    border: 1px solid #174B30;
-    border-radius: 17px;
+    border: 2px solid #174B30;
+    border-radius: 18px;
     padding: 18px;
-    box-shadow: 0 0 15px #00FF6608;
+    box-shadow: 0 0 18px #00FF6608;
 }
 
 /* INPUT LABEL */
@@ -124,7 +120,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     color: #00C968 !important;
     font-size: 14px !important;
     font-weight: 700 !important;
-    letter-spacing: 0.7px;
+    letter-spacing: 1px;
 }
 
 /* INPUT BOX */
@@ -133,9 +129,9 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #10271A !important;
     color: #00F080 !important;
     border: 1px solid #17683B !important;
-    border-radius: 9px !important;
-    min-height: 45px !important;
-    padding: 9px 13px !important;
+    border-radius: 10px !important;
+    min-height: 42px !important;
+    padding: 10px 15px !important;
     font-size: 15px !important;
     width: 100% !important;
 }
@@ -145,8 +141,8 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 }
 
 .stTextInput input:focus {
-    border: 1px solid #00E875 !important;
-    box-shadow: 0 0 9px #00E87530 !important;
+    border: 2px solid #00E875 !important;
+    box-shadow: 0 0 12px #00E87530 !important;
 }
 
 /* SELECT BOX */
@@ -155,25 +151,23 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #10271A !important;
     color: #00E875 !important;
     border: 1px solid #17683B !important;
-    border-radius: 9px !important;
-    min-height: 43px;
+    border-radius: 10px !important;
+    min-height: 42px;
 }
 
-/* BUTTONS - COMPACT SIZE */
+/* ALL BUTTONS */
 
 .stButton {
-    width: fit-content !important;
+    width: 100%;
 }
 
 .stButton button {
-    width: auto !important;
-    min-width: 175px !important;
-    min-height: 43px !important;
-    padding: 7px 17px !important;
+    width: 100% !important;
+    min-height: 45px !important;
     border-radius: 10px !important;
-    font-size: 13px !important;
+    font-size: 15px !important;
     font-weight: 750 !important;
-    letter-spacing: 0.5px !important;
+    letter-spacing: 1px !important;
     transition: 0.25s ease !important;
     border: 1px solid #17683B !important;
 }
@@ -184,12 +178,12 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #00D875 !important;
     color: #031008 !important;
     border: 1px solid #00F080 !important;
-    box-shadow: 0 0 12px #00D87525 !important;
+    box-shadow: 0 0 15px #00D87525 !important;
 }
 
 .stButton button[kind="primary"]:hover {
     background: #00FF88 !important;
-    box-shadow: 0 0 18px #00FF8860 !important;
+    box-shadow: 0 0 25px #00FF8860 !important;
 }
 
 /* SECONDARY BUTTON */
@@ -220,66 +214,20 @@ div[data-testid="stAlert"] {
 .footer-box {
     background: #08180F;
     border: 1px solid #174B30;
-    border-radius: 12px;
-    padding: 12px;
+    border-radius: 10px;
+    padding: 10px;
     text-align: center;
     color: #008F49;
     font-size: 12px;
-    letter-spacing: 1.5px;
-    margin-top: 18px;
-    line-height: 1.8;
+    letter-spacing: 2px;
+    margin-top: 15px;
 }
 
-/* MOBILE */
+/* DIVIDER */
 
-@media(max-width: 700px) {
-
-    .block-container {
-        padding: 12px 10px 25px !important;
-    }
-
-    .main-frame {
-        padding: 12px 8px;
-    }
-
-    .welcome-box {
-        font-size: 12px;
-        padding: 5px 17px;
-    }
-
-    .main-title {
-        font-size: 20px;
-        white-space: normal;
-    }
-
-    .sub-title {
-        font-size: 11px;
-        letter-spacing: 1px;
-    }
-
-    .heading-box {
-        font-size: 17px;
-        padding: 9px;
-    }
-
-    div[data-testid="stVerticalBlockBorderWrapper"] {
-        padding: 12px;
-    }
-
-    .stTextInput input {
-        min-height: 42px !important;
-        font-size: 14px !important;
-    }
-
-    .stButton button {
-        min-width: 150px !important;
-        min-height: 40px !important;
-        font-size: 12px !important;
-    }
-
-    .footer-box {
-        font-size: 10px;
-    }
+hr {
+    border-color: #17683B !important;
+    margin: 15px 0 !important;
 }
 
 </style>
@@ -293,17 +241,17 @@ div[data-testid="stAlert"] {
 st.markdown("""
 <div class="main-frame">
 
-    <div class="welcome-box">
-        WELCOME TO
-    </div>
+<div class="welcome-box">
+WELCOME TO
+</div>
 
-    <div class="main-title">
-        KUSHAL PRO MAX TRADING
-    </div>
+<div class="main-title">
+KUSHAL PRO MAX TRADING
+</div>
 
-    <div class="sub-title">
-        ADVANCED FINANCIAL ANALYTICS
-    </div>
+<div class="sub-title">
+ADVANCED FINANCIAL ANALYTICS
+</div>
 
 </div>
 """, unsafe_allow_html=True)
@@ -317,7 +265,7 @@ if st.session_state.page == "login":
 
     st.markdown("""
     <div class="heading-box">
-        SECURE LOGIN
+    SECURE LOGIN
     </div>
     """, unsafe_allow_html=True)
 
@@ -360,7 +308,8 @@ if st.session_state.page == "login":
         text-align:center;
         color:#008F49;
         font-size:14px;
-        letter-spacing:1px;">
+        letter-spacing:1px;
+        margin-top: 5px;">
         NEW USER? REGISTER YOUR ACCOUNT
         </p>
         """, unsafe_allow_html=True)
@@ -374,7 +323,7 @@ elif st.session_state.page == "register":
 
     st.markdown("""
     <div class="heading-box">
-        CREATE NEW ACCOUNT
+    CREATE NEW ACCOUNT
     </div>
     """, unsafe_allow_html=True)
 
@@ -459,7 +408,7 @@ elif st.session_state.page == "otp":
 
     st.markdown("""
     <div class="heading-box">
-        TWO FACTOR AUTHENTICATION
+    TWO FACTOR AUTHENTICATION
     </div>
     """, unsafe_allow_html=True)
 
@@ -499,7 +448,7 @@ elif st.session_state.page == "forgot":
 
     st.markdown("""
     <div class="heading-box">
-        ACCOUNT RECOVERY
+    ACCOUNT RECOVERY
     </div>
     """, unsafe_allow_html=True)
 
@@ -615,7 +564,7 @@ elif st.session_state.page == "dashboard":
 
     st.markdown("""
     <div class="heading-box">
-        TRADING DASHBOARD
+    TRADING DASHBOARD
     </div>
     """, unsafe_allow_html=True)
 
@@ -629,19 +578,19 @@ elif st.session_state.page == "dashboard":
         <div style="
         background:#10271A;
         border:1px solid #17683B;
-        border-radius:12px;
-        padding:25px;
+        border-radius:15px;
+        padding:20px;
         text-align:center;">
 
-        <h2 style="color:#00F080;">
+        <h2 style="color:#00F080; margin-bottom: 5px;">
         KUSHAL PRO MAX ENGINE
         </h2>
 
-        <p style="color:#008F49;font-size:16px;">
+        <p style="color:#008F49; font-size:16px; margin-bottom: 5px;">
         ADVANCED FINANCIAL ANALYTICS
         </p>
 
-        <p style="color:#00E875;">
+        <p style="color:#00E875; font-size:14px;">
         ● TERMINAL ACTIVE
         </p>
 
@@ -661,10 +610,6 @@ elif st.session_state.page == "dashboard":
 
 st.markdown("""
 <div class="footer-box">
-    ● SYSTEM ONLINE
-    <br>
-    KUSHAL PRO MAX TRADING © 2026
-    <br>
-    PREMIUM FINANCIAL TERMINAL
+● SYSTEM ONLINE | KUSHAL PRO MAX TRADING © 2026 | PREMIUM FINANCIAL TERMINAL
 </div>
 """, unsafe_allow_html=True)
