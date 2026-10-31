@@ -23,7 +23,7 @@ if "users_db" not in st.session_state:
     st.session_state.users_db = {}
 
 # ==========================================
-# PREMIUM CSS DESIGN
+# PREMIUM CSS DESIGN (FIXED OVERLAPPING)
 # ==========================================
 
 st.markdown("""
@@ -37,7 +37,7 @@ st.markdown("""
 
 .block-container {
     max-width: 900px !important;
-    padding: 15px 15px 25px !important;
+    padding: 15px 15px 30px !important;
 }
 
 /* SECTION HEADING BOX */
@@ -46,9 +46,9 @@ st.markdown("""
     background: #0B2015;
     border: 1px solid #17683B;
     border-radius: 10px;
-    padding: 8px;
+    padding: 10px;
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     color: #00E875;
     font-size: 16px;
     font-weight: 750;
@@ -61,7 +61,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #09170F;
     border: 2px solid #174B30;
     border-radius: 15px;
-    padding: 15px;
+    padding: 20px;
     box-shadow: 0 0 18px #00FF6608;
 }
 
@@ -82,8 +82,8 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     color: #00F080 !important;
     border: 1px solid #17683B !important;
     border-radius: 8px !important;
-    min-height: 38px !important;
-    padding: 8px 12px !important;
+    min-height: 42px !important;
+    padding: 10px 12px !important;
     font-size: 14px !important;
     width: 100% !important;
 }
@@ -104,24 +104,27 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     color: #00E875 !important;
     border: 1px solid #17683B !important;
     border-radius: 8px !important;
-    min-height: 38px;
+    min-height: 42px;
 }
 
 /* ALL BUTTONS */
 
 .stButton {
     width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .stButton button {
     width: 100% !important;
-    min-height: 38px !important;
+    min-height: 42px !important;
     border-radius: 8px !important;
     font-size: 13px !important;
     font-weight: 700 !important;
     letter-spacing: 1px !important;
     transition: 0.25s ease !important;
     border: 1px solid #17683B !important;
+    padding: 8px 12px !important;
 }
 
 /* PRIMARY BUTTON */
@@ -167,19 +170,19 @@ div[data-testid="stAlert"] {
     background: #08180F;
     border: 1px solid #174B30;
     border-radius: 8px;
-    padding: 8px;
+    padding: 10px;
     text-align: center;
     color: #008F49;
     font-size: 11px;
     letter-spacing: 2px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 /* DIVIDER */
 
 hr {
     border-color: #17683B !important;
-    margin: 10px 0 !important;
+    margin: 12px 0 !important;
 }
 
 </style>
@@ -193,13 +196,13 @@ hr {
 with st.container(border=True):
 
     st.markdown(
-        "<div style='text-align:center;'>"
+        "<div style='text-align:center; padding-top: 5px;'>"
         "<span style='background:#092318;"
         "border:1px solid #00E875;"
         "border-radius:30px;"
-        "padding:7px 22px;"
+        "padding:6px 20px;"
         "color:#00E875;"
-        "font-size:13px;"
+        "font-size:12px;"
         "font-weight:700;"
         "letter-spacing:2px;'>"
         "WELCOME TO"
@@ -210,9 +213,9 @@ with st.container(border=True):
     st.markdown(
         "<h2 style='text-align:center;"
         "color:#00F080;"
-        "font-size:26px;"
+        "font-size:24px;"
         "font-weight:750;"
-        "margin:12px 0 5px 0;'>"
+        "margin:10px 0 4px 0;'>"
         "KUSHAL PRO MAX TRADING"
         "</h2>",
         unsafe_allow_html=True
@@ -221,9 +224,10 @@ with st.container(border=True):
     st.markdown(
         "<p style='text-align:center;"
         "color:#00B85B;"
-        "font-size:13px;"
+        "font-size:12px;"
         "font-weight:600;"
-        "letter-spacing:2px;'>"
+        "letter-spacing:2px;"
+        "margin-bottom: 5px;'>"
         "ADVANCED FINANCIAL ANALYTICS"
         "</p>",
         unsafe_allow_html=True
@@ -282,7 +286,7 @@ if st.session_state.page == "login":
         color:#008F49;
         font-size:12px;
         letter-spacing:1px;
-        margin-top: 4px;">
+        margin-top: 8px;">
         NEW USER? REGISTER YOUR ACCOUNT
         </p>
         """, unsafe_allow_html=True)
