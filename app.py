@@ -35,8 +35,6 @@ st.markdown("""
     font-family: 'Segoe UI', Arial, sans-serif;
 }
 
-/* MAIN DESKTOP WIDTH */
-
 .block-container {
     max-width: 1100px !important;
     padding: 35px 35px 50px !important;
@@ -73,9 +71,9 @@ st.markdown("""
 .main-title {
     color: #00F080;
     text-align: center;
-    font-size: clamp(38px, 5vw, 62px);
-    font-weight: 800;
-    letter-spacing: 2px;
+    font-size: 36px;
+    font-weight: 750;
+    letter-spacing: 1px;
     margin-top: 25px;
     text-shadow: 0 0 15px #00E87535;
 }
@@ -296,8 +294,6 @@ TRADING
 ADVANCED FINANCIAL ANALYTICS
 </div>
 
-<hr style="border:1px solid #00D875;width:55%;">
-
 </div>
 """, unsafe_allow_html=True)
 
@@ -341,12 +337,10 @@ if st.session_state.page == "login":
                 st.error("INVALID USER ID OR PASSWORD")
 
         if st.button("FORGOT PASSWORD?"):
-
             st.session_state.page = "forgot"
             st.rerun()
 
         if st.button("+ CREATE NEW ACCOUNT"):
-
             st.session_state.page = "register"
             st.rerun()
 
