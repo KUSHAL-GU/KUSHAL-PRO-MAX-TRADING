@@ -7,7 +7,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom Cyberpunk / Dark Green UI matching exact requirements
+# Custom Cyberpunk / Dark Green UI with Professional Styled Headings & Containers
 st.markdown("""
     <style>
     .stApp {
@@ -51,13 +51,18 @@ st.markdown("""
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
         margin-bottom: 15px;
     }
-    .card-title {
+    .cyber-card-title {
         text-align: center;
+        background: linear-gradient(90deg, #0a2113, #133b22, #0a2113);
+        border: 1px solid #00FF66;
         color: #00FF66;
-        font-size: 18px;
-        font-weight: bold;
-        letter-spacing: 2px;
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: 3px;
+        padding: 10px;
+        border-radius: 8px;
         margin-bottom: 22px;
+        text-shadow: 0 0 8px rgba(0, 255, 102, 0.5);
     }
     .input-label {
         color: #728a7b;
@@ -122,7 +127,7 @@ if "page" not in st.session_state:
 if "users_db" not in st.session_state:
     st.session_state.users_db = {}
 
-# 3. Header Section (Exact User Layout: Welcome in button, Kushal Pro Max Trading together in button)
+# 3. Header Section
 st.markdown("<div class='welcome-btn-box'>WELCOME</div>", unsafe_allow_html=True)
 st.markdown("<div class='title-btn-box'>KUSHAL PRO MAX TRADING<br><span style='font-size: 11px; color: #728a7b; letter-spacing: 1.5px;'>ADVANCED FINANCIAL ANALYTICS</span></div>", unsafe_allow_html=True)
 
@@ -132,7 +137,7 @@ with st.container():
 
     # ----------------- LOGIN SCREEN -----------------
     if st.session_state.page == "login":
-        st.markdown("<div class='card-title'>SECURE LOGIN</div>", unsafe_allow_html=True)
+        st.markdown("<div class='cyber-card-title'>[ SECURE LOGIN GATEWAY ]</div>", unsafe_allow_html=True)
         
         st.markdown("<div class='input-label'>USER ID</div>", unsafe_allow_html=True)
         user_id = st.text_input("uid_login", label_visibility="collapsed", placeholder="Enter your User ID")
@@ -164,7 +169,7 @@ with st.container():
 
     # ----------------- REGISTRATION SCREEN -----------------
     elif st.session_state.page == "register":
-        st.markdown("<div class='card-title'>CREATE ACCOUNT</div>", unsafe_allow_html=True)
+        st.markdown("<div class='cyber-card-title'>[ CREATE NEW ACCOUNT ]</div>", unsafe_allow_html=True)
         
         st.markdown("<div class='input-label'>USER ID</div>", unsafe_allow_html=True)
         new_user_id = st.text_input("uid_reg", label_visibility="collapsed", placeholder="Enter User ID")
@@ -199,7 +204,7 @@ with st.container():
 
     # ----------------- OTP SCREEN -----------------
     elif st.session_state.page == "otp":
-        st.markdown("<div class='card-title'>TWO-FACTOR AUTH</div>", unsafe_allow_html=True)
+        st.markdown("<div class='cyber-card-title'>[ TWO-FACTOR AUTH ]</div>", unsafe_allow_html=True)
         user = st.session_state.current_user
         mobile = st.session_state.users_db[user]["mobile"]
         
@@ -217,7 +222,7 @@ with st.container():
 
     # ----------------- RECOVERY SCREEN -----------------
     elif st.session_state.page == "forgot":
-        st.markdown("<div class='card-title'>SYSTEM RECOVERY</div>", unsafe_allow_html=True)
+        st.markdown("<div class='cyber-card-title'>[ SYSTEM RECOVERY ]</div>", unsafe_allow_html=True)
         
         st.markdown("<div class='input-label'>SELECT RECOVERY MODE</div>", unsafe_allow_html=True)
         option = st.selectbox("rec_mode", ["RESET PASSWORD", "RETRIEVE USER ID", "RETRIEVE MOBILE NUMBER"], label_visibility="collapsed")
@@ -267,7 +272,7 @@ with st.container():
 
     # ----------------- DASHBOARD -----------------
     elif st.session_state.page == "dashboard":
-        st.markdown(f"<div class='card-title'>TERMINAL ACTIVE</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='cyber-card-title'>[ TERMINAL ACTIVE ]</div>", unsafe_allow_html=True)
         st.success(f"WELCOME, {st.session_state.current_user.upper()}! ENGINE ONLINE.")
         st.markdown("<div class='secondary-btn'>", unsafe_allow_html=True)
         if st.button("DISCONNECT / LOGOUT"):
