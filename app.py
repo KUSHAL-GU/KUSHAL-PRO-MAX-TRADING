@@ -2,7 +2,7 @@ import streamlit as st
 
 # ==========================================
 # KUSHAL PRO MAX TRADING
-# PREMIUM DESKTOP INTERFACE
+# COMPACT PREMIUM DESKTOP INTERFACE
 # ==========================================
 
 st.set_page_config(
@@ -37,33 +37,34 @@ st.markdown("""
 
 .block-container {
     max-width: 1100px !important;
-    padding: 35px 35px 50px !important;
+    padding: 20px 35px 35px !important;
 }
 
-/* MAIN OUTER BOX */
+/* MAIN HEADER BOX */
 
 .main-frame {
+    width: 100%;
     background: #050D09;
-    border: 2px solid #174B30;
-    border-radius: 25px;
-    padding: 35px;
-    box-shadow: 0 0 25px #00FF6610;
+    border: 1px solid #17683B;
+    border-radius: 18px;
+    padding: 13px 25px 15px;
+    box-shadow: 0 0 18px #00FF6610;
+    text-align: center;
 }
 
 /* WELCOME */
 
 .welcome-box {
+    display: inline-block;
     background: #092318;
     border: 1px solid #17683B;
-    border-radius: 50px;
-    padding: 12px 35px;
-    width: fit-content;
-    margin: auto;
+    border-radius: 30px;
+    padding: 6px 24px;
+    margin: 0 auto;
     color: #00E875;
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-align: center;
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: 2px;
 }
 
 /* BRAND TITLE */
@@ -71,21 +72,23 @@ st.markdown("""
 .main-title {
     color: #00F080;
     text-align: center;
-    font-size: 36px;
+    font-size: 26px;
+    line-height: 1.25;
     font-weight: 750;
     letter-spacing: 1px;
-    margin-top: 25px;
-    text-shadow: 0 0 15px #00E87535;
+    margin-top: 9px;
+    text-shadow: 0 0 12px #00E87535;
+    white-space: nowrap;
 }
 
 .sub-title {
     color: #008F49;
-    font-size: 23px;
+    font-size: 15px;
     font-weight: 600;
     text-align: center;
-    letter-spacing: 3px;
-    margin-top: 12px;
-    margin-bottom: 35px;
+    letter-spacing: 2px;
+    margin-top: 5px;
+    margin-bottom: 0;
 }
 
 /* SECTION HEADING BOX */
@@ -93,24 +96,25 @@ st.markdown("""
 .heading-box {
     background: #0B2015;
     border: 1px solid #17683B;
-    border-radius: 15px;
-    padding: 17px;
+    border-radius: 12px;
+    padding: 10px;
     text-align: center;
-    margin-bottom: 25px;
+    margin-top: 12px;
+    margin-bottom: 12px;
     color: #00E875;
-    font-size: 30px;
+    font-size: 21px;
     font-weight: 750;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
 }
 
 /* CONTENT PANEL */
 
 div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #09170F;
-    border: 2px solid #174B30;
-    border-radius: 22px;
-    padding: 25px;
-    box-shadow: 0 0 18px #00FF6608;
+    border: 1px solid #174B30;
+    border-radius: 17px;
+    padding: 18px;
+    box-shadow: 0 0 15px #00FF6608;
 }
 
 /* INPUT LABEL */
@@ -118,9 +122,9 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 .stTextInput label,
 .stSelectbox label {
     color: #00C968 !important;
-    font-size: 19px !important;
+    font-size: 14px !important;
     font-weight: 700 !important;
-    letter-spacing: 1px;
+    letter-spacing: 0.7px;
 }
 
 /* INPUT BOX */
@@ -129,10 +133,10 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #10271A !important;
     color: #00F080 !important;
     border: 1px solid #17683B !important;
-    border-radius: 13px !important;
-    min-height: 65px !important;
-    padding: 15px 20px !important;
-    font-size: 20px !important;
+    border-radius: 9px !important;
+    min-height: 45px !important;
+    padding: 9px 13px !important;
+    font-size: 15px !important;
     width: 100% !important;
 }
 
@@ -141,8 +145,8 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 }
 
 .stTextInput input:focus {
-    border: 2px solid #00E875 !important;
-    box-shadow: 0 0 12px #00E87530 !important;
+    border: 1px solid #00E875 !important;
+    box-shadow: 0 0 9px #00E87530 !important;
 }
 
 /* SELECT BOX */
@@ -151,23 +155,25 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #10271A !important;
     color: #00E875 !important;
     border: 1px solid #17683B !important;
-    border-radius: 13px !important;
-    min-height: 55px;
+    border-radius: 9px !important;
+    min-height: 43px;
 }
 
-/* ALL BUTTONS */
+/* BUTTONS - COMPACT SIZE */
 
 .stButton {
-    width: 100%;
+    width: fit-content !important;
 }
 
 .stButton button {
-    width: 100% !important;
-    min-height: 65px !important;
-    border-radius: 13px !important;
-    font-size: 19px !important;
+    width: auto !important;
+    min-width: 175px !important;
+    min-height: 43px !important;
+    padding: 7px 17px !important;
+    border-radius: 10px !important;
+    font-size: 13px !important;
     font-weight: 750 !important;
-    letter-spacing: 1px !important;
+    letter-spacing: 0.5px !important;
     transition: 0.25s ease !important;
     border: 1px solid #17683B !important;
 }
@@ -178,12 +184,12 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #00D875 !important;
     color: #031008 !important;
     border: 1px solid #00F080 !important;
-    box-shadow: 0 0 15px #00D87525 !important;
+    box-shadow: 0 0 12px #00D87525 !important;
 }
 
 .stButton button[kind="primary"]:hover {
     background: #00FF88 !important;
-    box-shadow: 0 0 25px #00FF8860 !important;
+    box-shadow: 0 0 18px #00FF8860 !important;
 }
 
 /* SECONDARY BUTTON */
@@ -202,11 +208,11 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 /* INFO AND ALERT */
 
 div[data-testid="stAlert"] {
-    border-radius: 13px !important;
+    border-radius: 10px !important;
 }
 
 .stAlert p {
-    font-size: 16px !important;
+    font-size: 14px !important;
 }
 
 /* FOOTER */
@@ -214,20 +220,14 @@ div[data-testid="stAlert"] {
 .footer-box {
     background: #08180F;
     border: 1px solid #174B30;
-    border-radius: 13px;
-    padding: 17px;
+    border-radius: 12px;
+    padding: 12px;
     text-align: center;
     color: #008F49;
-    font-size: 15px;
-    letter-spacing: 2px;
-    margin-top: 30px;
-}
-
-/* DIVIDER */
-
-hr {
-    border-color: #17683B !important;
-    margin: 30px 0 !important;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    margin-top: 18px;
+    line-height: 1.8;
 }
 
 /* MOBILE */
@@ -235,37 +235,50 @@ hr {
 @media(max-width: 700px) {
 
     .block-container {
-        padding: 15px 10px 30px !important;
+        padding: 12px 10px 25px !important;
     }
 
     .main-frame {
-        padding: 15px;
-    }
-
-    .main-title {
-        font-size: 32px;
-    }
-
-    .sub-title {
-        font-size: 14px;
-    }
-
-    .heading-box {
-        font-size: 23px;
-    }
-
-    .stTextInput input {
-        min-height: 55px !important;
-        font-size: 17px !important;
-    }
-
-    .stButton button {
-        min-height: 58px !important;
-        font-size: 16px !important;
+        padding: 12px 8px;
     }
 
     .welcome-box {
-        font-size: 16px;
+        font-size: 12px;
+        padding: 5px 17px;
+    }
+
+    .main-title {
+        font-size: 20px;
+        white-space: normal;
+    }
+
+    .sub-title {
+        font-size: 11px;
+        letter-spacing: 1px;
+    }
+
+    .heading-box {
+        font-size: 17px;
+        padding: 9px;
+    }
+
+    div[data-testid="stVerticalBlockBorderWrapper"] {
+        padding: 12px;
+    }
+
+    .stTextInput input {
+        min-height: 42px !important;
+        font-size: 14px !important;
+    }
+
+    .stButton button {
+        min-width: 150px !important;
+        min-height: 40px !important;
+        font-size: 12px !important;
+    }
+
+    .footer-box {
+        font-size: 10px;
     }
 }
 
@@ -280,19 +293,17 @@ hr {
 st.markdown("""
 <div class="main-frame">
 
-<div class="welcome-box">
-WELCOME TO
-</div>
+    <div class="welcome-box">
+        WELCOME TO
+    </div>
 
-<div class="main-title">
-KUSHAL PRO MAX
-<br>
-TRADING
-</div>
+    <div class="main-title">
+        KUSHAL PRO MAX TRADING
+    </div>
 
-<div class="sub-title">
-ADVANCED FINANCIAL ANALYTICS
-</div>
+    <div class="sub-title">
+        ADVANCED FINANCIAL ANALYTICS
+    </div>
 
 </div>
 """, unsafe_allow_html=True)
@@ -306,7 +317,7 @@ if st.session_state.page == "login":
 
     st.markdown("""
     <div class="heading-box">
-    SECURE LOGIN
+        SECURE LOGIN
     </div>
     """, unsafe_allow_html=True)
 
@@ -348,7 +359,7 @@ if st.session_state.page == "login":
         <p style="
         text-align:center;
         color:#008F49;
-        font-size:17px;
+        font-size:14px;
         letter-spacing:1px;">
         NEW USER? REGISTER YOUR ACCOUNT
         </p>
@@ -363,7 +374,7 @@ elif st.session_state.page == "register":
 
     st.markdown("""
     <div class="heading-box">
-    CREATE NEW ACCOUNT
+        CREATE NEW ACCOUNT
     </div>
     """, unsafe_allow_html=True)
 
@@ -448,7 +459,7 @@ elif st.session_state.page == "otp":
 
     st.markdown("""
     <div class="heading-box">
-    TWO FACTOR AUTHENTICATION
+        TWO FACTOR AUTHENTICATION
     </div>
     """, unsafe_allow_html=True)
 
@@ -488,7 +499,7 @@ elif st.session_state.page == "forgot":
 
     st.markdown("""
     <div class="heading-box">
-    ACCOUNT RECOVERY
+        ACCOUNT RECOVERY
     </div>
     """, unsafe_allow_html=True)
 
@@ -604,7 +615,7 @@ elif st.session_state.page == "dashboard":
 
     st.markdown("""
     <div class="heading-box">
-    TRADING DASHBOARD
+        TRADING DASHBOARD
     </div>
     """, unsafe_allow_html=True)
 
@@ -618,15 +629,15 @@ elif st.session_state.page == "dashboard":
         <div style="
         background:#10271A;
         border:1px solid #17683B;
-        border-radius:15px;
-        padding:30px;
+        border-radius:12px;
+        padding:25px;
         text-align:center;">
 
-        <h1 style="color:#00F080;">
+        <h2 style="color:#00F080;">
         KUSHAL PRO MAX ENGINE
-        </h1>
+        </h2>
 
-        <p style="color:#008F49;font-size:20px;">
+        <p style="color:#008F49;font-size:16px;">
         ADVANCED FINANCIAL ANALYTICS
         </p>
 
@@ -650,10 +661,10 @@ elif st.session_state.page == "dashboard":
 
 st.markdown("""
 <div class="footer-box">
-● SYSTEM ONLINE
-<br>
-KUSHAL PRO MAX TRADING © 2026
-<br>
-PREMIUM FINANCIAL TERMINAL
+    ● SYSTEM ONLINE
+    <br>
+    KUSHAL PRO MAX TRADING © 2026
+    <br>
+    PREMIUM FINANCIAL TERMINAL
 </div>
 """, unsafe_allow_html=True)
