@@ -3,7 +3,7 @@ import streamlit as st
 st.set_page_config(
     page_title="KUSHAL PRO MAX TRADING",
     page_icon="⚡",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="collapsed"
 )
 
@@ -13,7 +13,7 @@ if "page" not in st.session_state:
 if "users_db" not in st.session_state:
     st.session_state.users_db = {}
 
-# Clean CSS designed to prevent overlap and fit single screen
+# Clean & Wide Desktop Mode CSS (No Header, Compact Wide Layout)
 st.markdown("""
 <style>
 .stApp {
@@ -22,53 +22,18 @@ st.markdown("""
     font-family: 'Segoe UI', Arial, sans-serif;
 }
 .block-container {
-    max-width: 480px !important;
-    padding: 15px 15px 25px !important;
-}
-.main-header {
-    background: #050D09;
-    border: 2px solid #174B30;
-    border-radius: 16px;
-    padding: 15px;
-    text-align: center;
-    margin-bottom: 12px;
-    box-shadow: 0 0 15px rgba(0, 255, 102, 0.08);
-}
-.welcome-tag {
-    background: #092318;
-    border: 1px solid #00E875;
-    border-radius: 20px;
-    padding: 4px 14px;
-    color: #00E875;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    display: inline-block;
-    margin-bottom: 6px;
-}
-.main-title {
-    color: #00F080;
-    font-size: 20px;
-    font-weight: 750;
-    letter-spacing: 1px;
-    margin: 4px 0;
-}
-.sub-title {
-    color: #008F49;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    margin: 0;
+    max-width: 650px !important;
+    padding: 20px 20px 30px !important;
 }
 .heading-box {
     background: #0B2015;
     border: 1px solid #17683B;
     border-radius: 8px;
-    padding: 8px;
+    padding: 10px;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     color: #00E875;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 750;
     letter-spacing: 2px;
 }
@@ -76,12 +41,12 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #09170F;
     border: 1px solid #174B30;
     border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 10px;
+    padding: 18px;
+    margin-bottom: 12px;
 }
 .stTextInput label {
     color: #00C968 !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 700 !important;
 }
 .stTextInput input {
@@ -89,19 +54,19 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     color: #00F080 !important;
     border: 1px solid #17683B !important;
     border-radius: 6px !important;
-    min-height: 34px !important;
-    padding: 6px 10px !important;
-    font-size: 13px !important;
+    min-height: 38px !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
 }
 .stButton button {
     width: 100% !important;
-    min-height: 36px !important;
+    min-height: 38px !important;
     border-radius: 6px !important;
-    font-size: 12px !important;
+    font-size: 13px !important;
     font-weight: 700 !important;
     border: 1px solid #17683B !important;
-    margin-top: 4px;
-    margin-bottom: 4px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 .stButton button[kind="primary"] {
     background: #00D875 !important;
@@ -116,25 +81,17 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #08180F;
     border: 1px solid #174B30;
     border-radius: 6px;
-    padding: 6px;
+    padding: 8px;
     text-align: center;
     color: #008F49;
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 1px;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Header
-st.markdown("""
-<div class="main-header">
-    <div class="welcome-tag">WELCOME TO</div>
-    <div class="main-title">KUSHAL PRO MAX TRADING</div>
-    <div class="sub-title">ADVANCED FINANCIAL ANALYTICS</div>
-</div>
-""", unsafe_allow_html=True)
-
+# ----------------- LOGIN PAGE -----------------
 if st.session_state.page == "login":
     st.markdown('<div class="heading-box">SECURE LOGIN</div>', unsafe_allow_html=True)
     with st.container(border=True):
@@ -157,8 +114,9 @@ if st.session_state.page == "login":
             st.session_state.page = "register"
             st.rerun()
             
-        st.markdown('<p style="text-align:center; color:#008F49; font-size:11px; margin-top:4px;">NEW USER? REGISTER YOUR ACCOUNT</p>', unsafe_allow_html=True)
+        st.markdown('<p style="text-align:center; color:#008F49; font-size:12px; margin-top:5px;">NEW USER? REGISTER YOUR ACCOUNT</p>', unsafe_allow_html=True)
 
+# ----------------- REGISTRATION PAGE -----------------
 elif st.session_state.page == "register":
     st.markdown('<div class="heading-box">CREATE NEW ACCOUNT</div>', unsafe_allow_html=True)
     with st.container(border=True):
@@ -193,6 +151,7 @@ elif st.session_state.page == "register":
             st.session_state.page = "login"
             st.rerun()
 
+# ----------------- OTP PAGE -----------------
 elif st.session_state.page == "otp":
     st.markdown('<div class="heading-box">TWO FACTOR AUTHENTICATION</div>', unsafe_allow_html=True)
     user = st.session_state.current_user
@@ -210,6 +169,7 @@ elif st.session_state.page == "otp":
             st.session_state.page = "login"
             st.rerun()
 
+# ----------------- FORGOT PASSWORD -----------------
 elif st.session_state.page == "forgot":
     st.markdown('<div class="heading-box">ACCOUNT RECOVERY</div>', unsafe_allow_html=True)
     with st.container(border=True):
@@ -256,6 +216,7 @@ elif st.session_state.page == "forgot":
             st.session_state.page = "login"
             st.rerun()
 
+# ----------------- DASHBOARD -----------------
 elif st.session_state.page == "dashboard":
     st.markdown('<div class="heading-box">TRADING DASHBOARD</div>', unsafe_allow_html=True)
     with st.container(border=True):
