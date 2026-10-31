@@ -48,6 +48,7 @@ st.markdown("""
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 0 25px #00FF6610;
+    text-align: center;
 }
 
 /* WELCOME */
@@ -56,14 +57,13 @@ st.markdown("""
     background: #092318;
     border: 1px solid #17683B;
     border-radius: 30px;
-    padding: 8px 25px;
-    width: fit-content;
-    margin: auto;
+    padding: 6px 20px;
+    display: inline-block;
     color: #00E875;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     letter-spacing: 2px;
-    text-align: center;
+    margin-bottom: 10px;
 }
 
 /* BRAND TITLE */
@@ -74,7 +74,7 @@ st.markdown("""
     font-size: 26px;
     font-weight: 750;
     letter-spacing: 1px;
-    margin-top: 12px;
+    margin-top: 5px;
     text-shadow: 0 0 15px #00E87535;
 }
 
@@ -85,7 +85,7 @@ st.markdown("""
     text-align: center;
     letter-spacing: 2px;
     margin-top: 6px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 /* SECTION HEADING BOX */
@@ -94,11 +94,11 @@ st.markdown("""
     background: #0B2015;
     border: 1px solid #17683B;
     border-radius: 12px;
-    padding: 12px;
+    padding: 10px;
     text-align: center;
     margin-bottom: 15px;
     color: #00E875;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 750;
     letter-spacing: 2px;
 }
@@ -163,10 +163,10 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 
 .stButton button {
     width: 100% !important;
-    min-height: 45px !important;
+    min-height: 42px !important;
     border-radius: 10px !important;
-    font-size: 15px !important;
-    font-weight: 750 !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
     letter-spacing: 1px !important;
     transition: 0.25s ease !important;
     border: 1px solid #17683B !important;
@@ -307,7 +307,7 @@ if st.session_state.page == "login":
         <p style="
         text-align:center;
         color:#008F49;
-        font-size:14px;
+        font-size:13px;
         letter-spacing:1px;
         margin-top: 5px;">
         NEW USER? REGISTER YOUR ACCOUNT
