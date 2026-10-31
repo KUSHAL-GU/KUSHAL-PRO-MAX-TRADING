@@ -36,34 +36,34 @@ st.markdown("""
 }
 
 .block-container {
-    max-width: 950px !important;
-    padding: 20px 20px 30px !important;
+    max-width: 900px !important;
+    padding: 15px 15px 25px !important;
 }
 
-/* MAIN OUTER BOX */
+/* UNIFIED MAIN CONTAINER */
 
 .main-frame {
     background: #050D09;
     border: 2px solid #174B30;
-    border-radius: 20px;
-    padding: 20px;
+    border-radius: 18px;
+    padding: 18px;
     box-shadow: 0 0 25px #00FF6610;
     text-align: center;
 }
 
-/* WELCOME */
+/* WELCOME BADGE */
 
 .welcome-box {
     background: #092318;
     border: 1px solid #17683B;
-    border-radius: 30px;
-    padding: 6px 20px;
+    border-radius: 20px;
+    padding: 4px 18px;
     display: inline-block;
     color: #00E875;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: 2px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 /* BRAND TITLE */
@@ -71,21 +71,21 @@ st.markdown("""
 .main-title {
     color: #00F080;
     text-align: center;
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 750;
     letter-spacing: 1px;
-    margin-top: 5px;
+    margin-top: 2px;
     text-shadow: 0 0 15px #00E87535;
 }
 
 .sub-title {
     color: #008F49;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     text-align: center;
     letter-spacing: 2px;
-    margin-top: 6px;
-    margin-bottom: 5px;
+    margin-top: 4px;
+    margin-bottom: 12px;
 }
 
 /* SECTION HEADING BOX */
@@ -93,12 +93,12 @@ st.markdown("""
 .heading-box {
     background: #0B2015;
     border: 1px solid #17683B;
-    border-radius: 12px;
-    padding: 10px;
+    border-radius: 10px;
+    padding: 8px;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     color: #00E875;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 750;
     letter-spacing: 2px;
 }
@@ -108,8 +108,8 @@ st.markdown("""
 div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #09170F;
     border: 2px solid #174B30;
-    border-radius: 18px;
-    padding: 18px;
+    border-radius: 15px;
+    padding: 15px;
     box-shadow: 0 0 18px #00FF6608;
 }
 
@@ -118,7 +118,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 .stTextInput label,
 .stSelectbox label {
     color: #00C968 !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
     font-weight: 700 !important;
     letter-spacing: 1px;
 }
@@ -129,10 +129,10 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #10271A !important;
     color: #00F080 !important;
     border: 1px solid #17683B !important;
-    border-radius: 10px !important;
-    min-height: 42px !important;
-    padding: 10px 15px !important;
-    font-size: 15px !important;
+    border-radius: 8px !important;
+    min-height: 38px !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
     width: 100% !important;
 }
 
@@ -142,7 +142,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 
 .stTextInput input:focus {
     border: 2px solid #00E875 !important;
-    box-shadow: 0 0 12px #00E87530 !important;
+    box-shadow: 0 0 10px #00E87530 !important;
 }
 
 /* SELECT BOX */
@@ -151,8 +151,8 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #10271A !important;
     color: #00E875 !important;
     border: 1px solid #17683B !important;
-    border-radius: 10px !important;
-    min-height: 42px;
+    border-radius: 8px !important;
+    min-height: 38px;
 }
 
 /* ALL BUTTONS */
@@ -163,9 +163,9 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 
 .stButton button {
     width: 100% !important;
-    min-height: 42px !important;
-    border-radius: 10px !important;
-    font-size: 14px !important;
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    font-size: 13px !important;
     font-weight: 700 !important;
     letter-spacing: 1px !important;
     transition: 0.25s ease !important;
@@ -178,12 +178,12 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #00D875 !important;
     color: #031008 !important;
     border: 1px solid #00F080 !important;
-    box-shadow: 0 0 15px #00D87525 !important;
+    box-shadow: 0 0 12px #00D87525 !important;
 }
 
 .stButton button[kind="primary"]:hover {
     background: #00FF88 !important;
-    box-shadow: 0 0 25px #00FF8860 !important;
+    box-shadow: 0 0 20px #00FF8860 !important;
 }
 
 /* SECONDARY BUTTON */
@@ -202,11 +202,11 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 /* INFO AND ALERT */
 
 div[data-testid="stAlert"] {
-    border-radius: 10px !important;
+    border-radius: 8px !important;
 }
 
 .stAlert p {
-    font-size: 14px !important;
+    font-size: 13px !important;
 }
 
 /* FOOTER */
@@ -214,20 +214,20 @@ div[data-testid="stAlert"] {
 .footer-box {
     background: #08180F;
     border: 1px solid #174B30;
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 8px;
+    padding: 8px;
     text-align: center;
     color: #008F49;
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 2px;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 /* DIVIDER */
 
 hr {
     border-color: #17683B !important;
-    margin: 15px 0 !important;
+    margin: 10px 0 !important;
 }
 
 </style>
@@ -307,9 +307,9 @@ if st.session_state.page == "login":
         <p style="
         text-align:center;
         color:#008F49;
-        font-size:13px;
+        font-size:12px;
         letter-spacing:1px;
-        margin-top: 5px;">
+        margin-top: 4px;">
         NEW USER? REGISTER YOUR ACCOUNT
         </p>
         """, unsafe_allow_html=True)
@@ -578,19 +578,19 @@ elif st.session_state.page == "dashboard":
         <div style="
         background:#10271A;
         border:1px solid #17683B;
-        border-radius:15px;
-        padding:20px;
+        border-radius:12px;
+        padding:15px;
         text-align:center;">
 
-        <h2 style="color:#00F080; margin-bottom: 5px;">
+        <h3 style="color:#00F080; margin-bottom: 5px;">
         KUSHAL PRO MAX ENGINE
-        </h2>
+        </h3>
 
-        <p style="color:#008F49; font-size:16px; margin-bottom: 5px;">
+        <p style="color:#008F49; font-size:14px; margin-bottom: 5px;">
         ADVANCED FINANCIAL ANALYTICS
         </p>
 
-        <p style="color:#00E875; font-size:14px;">
+        <p style="color:#00E875; font-size:13px;">
         ● TERMINAL ACTIVE
         </p>
 
