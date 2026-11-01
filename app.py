@@ -1,4 +1,4 @@
-aimport streamlit as st
+import streamlit as st
 import json
 import os
 import bcrypt
@@ -564,4 +564,3 @@ st.markdown("""
     ● FULL SCREEN DESKTOP SECURE | KUSHAL PRO MAX TRADING © 2026
 </div>
 """, unsafe_allow_html=True)
-
