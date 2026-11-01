@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 st.set_page_config(
     page_title="KUSHAL PRO MAX TRADING",
     page_icon="⚡",
-    layout="wide",  # Full screen / Wide layout for desktop
+    layout="wide",
     initial_sidebar_state="collapsed"
 )
 
@@ -93,17 +93,17 @@ if "audit_logs" not in st.session_state:
 
 admin_data = load_admin_data()
 
-# ==================== STYLING (Black Background, Green Glow, White Text Inside Boxes) ====================
+# ==================== STYLING (Green & Black Theme - Original Title Restored) ====================
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Segoe+UI:wght@400;600;700&display=swap');
 
 .stApp {
     background: 
-        radial-gradient(circle at 0% 0%, rgba(0, 200, 80, 0.1) 0%, transparent 40%),
-        radial-gradient(circle at 100% 0%, rgba(0, 200, 80, 0.1) 0%, transparent 40%),
-        #010302 !important;
-    color: #FFFFFF !important;
+        radial-gradient(circle at 0% 0%, rgba(0, 200, 80, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 100% 0%, rgba(0, 200, 80, 0.12) 0%, transparent 40%),
+        #010503 !important;
+    color: #00A94F !important;
     font-family: 'Segoe UI', Arial, sans-serif;
     background-attachment: fixed;
 }
@@ -113,13 +113,13 @@ st.markdown("""
     margin: auto !important;
 }
 .main-header {
-    background: #050B08;
-    border: 2px solid #00C968;
+    background: #050D09;
+    border: 2px solid #174B30;
     border-radius: 14px;
     padding: 20px;
     text-align: center;
     margin-bottom: 20px;
-    box-shadow: 0 0 25px rgba(0, 232, 117, 0.2);
+    box-shadow: 0 0 20px rgba(0, 255, 102, 0.15);
 }
 .welcome-tag {
     background: #092318;
@@ -135,53 +135,49 @@ st.markdown("""
 }
 .main-title {
     font-family: 'Orbitron', sans-serif !important;
-    color: #00F080;
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    margin: 4px 0;
-    text-shadow: 0 0 12px rgba(0, 240, 128, 0.5);
+    color: #00F080 !important;
+    font-size: 26px !important;
+    font-weight: 800 !important;
+    letter-spacing: 2px !important;
+    margin: 4px 0 !important;
+    text-shadow: 0 0 12px rgba(0, 240, 128, 0.5) !important;
 }
 .sub-title {
-    color: #00A94F;
+    color: #008F49 !important;
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 1.5px;
     margin: 0;
 }
 .heading-box {
-    background: #07160F;
-    border: 1px solid #00A94F;
+    background: #0B2015;
+    border: 1px solid #17683B;
     border-radius: 8px;
     padding: 12px;
     text-align: center;
     margin-bottom: 16px;
-    color: #00F080;
+    color: #00E875;
     font-size: 18px;
     font-weight: 700;
     letter-spacing: 1.5px;
 }
 div[data-testid="stVerticalBlockBorderWrapper"] {
-    background: #060F0A !important;
+    background: #09170F !important;
     border: 1px solid #174B30 !important;
     border-radius: 12px;
     padding: 24px 28px;
     margin-bottom: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-}
-/* White text inside boxes for maximum readability */
-p, span, label, div, .stMarkdown {
-    color: #FFFFFF !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 .stTextInput label {
-    color: #00E875 !important;
+    color: #00C968 !important;
     font-size: 14px !important;
     font-weight: 700 !important;
 }
 .stTextInput input {
-    background: #020805 !important;
-    color: #FFFFFF !important;
-    border: 1px solid #00A94F !important;
+    background: #10271A !important;
+    color: #00F080 !important;
+    border: 1px solid #17683B !important;
     border-radius: 6px !important;
     min-height: 42px !important;
     padding: 8px 14px !important;
@@ -193,29 +189,28 @@ p, span, label, div, .stMarkdown {
     border-radius: 6px !important;
     font-size: 14px !important;
     font-weight: 700 !important;
-    border: 1px solid #00A94F !important;
+    border: 1px solid #17683B !important;
     background: #0D2B1D !important;
-    color: #FFFFFF !important;
+    color: #00E875 !important;
     margin-top: 6px;
     margin-bottom: 6px;
-    transition: 0.2s ease;
 }
 .stButton button:hover {
     border-color: #00F080 !important;
     box-shadow: 0 0 10px rgba(0,240,128,0.4);
 }
 .stButton button[kind="primary"] {
-    background: #00C968 !important;
-    color: #020805 !important;
+    background: #00D875 !important;
+    color: #031008 !important;
     border: 1px solid #00F080 !important;
 }
 .footer-box {
-    background: #050B08;
+    background: #08180F;
     border: 1px solid #174B30;
     border-radius: 6px;
     padding: 10px;
     text-align: center;
-    color: #00A94F;
+    color: #008F49;
     font-size: 12px;
     letter-spacing: 1px;
     margin-top: 20px;
@@ -228,7 +223,7 @@ st.markdown("""
 <div class="main-header">
     <div class="welcome-tag">WELCOME TO</div>
     <div class="main-title">KUSHAL PRO MAX TRADING</div>
-    <div class="sub-title">DESKTOP TRADING TERMINAL & ANALYTICS</div>
+    <div class="sub-title">AUDITED PRODUCTION-GRADE SECURE TERMINAL</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -236,7 +231,7 @@ st.markdown("""
 if admin_data is None:
     st.markdown('<div class="heading-box">INITIAL MASTER SETUP</div>', unsafe_allow_html=True)
     with st.container(border=True):
-        st.markdown("<p style='color:#00E875; font-weight:600;'>ESTABLISH SECURE MASTER CREDENTIALS.</p>", unsafe_allow_html=True)
+        st.info("ESTABLISH SECURE MASTER CREDENTIALS.")
         new_user = st.text_input("CREATE MASTER USER ID", placeholder="ENTER UNIQUE USER ID")
         mobile_no = st.text_input("MOBILE NUMBER (10 DIGITS)", placeholder="10-DIGIT MOBILE NUMBER", max_chars=10)
         new_pwd = st.text_input("CREATE PASSWORD (MIN 8 CHARS)", type="password", placeholder="SECURE PASSWORD")
@@ -324,7 +319,7 @@ elif st.session_state.page == "pin_verify":
             st.session_state.failed_pin_attempts = 0
 
         with st.container(border=True):
-            st.markdown("<p style='color:#FFFFFF;'>ENTER YOUR 6-DIGIT SECURITY PIN TO UNLOCK THE TERMINAL.</p>", unsafe_allow_html=True)
+            st.info("ENTER YOUR 6-DIGIT SECURITY PIN TO UNLOCK THE TERMINAL.")
             pin_input = st.text_input("6-DIGIT PIN CODE", type="password", max_chars=6, placeholder="••••••")
             
             col1, col2 = st.columns(2)
@@ -359,7 +354,7 @@ elif st.session_state.page == "pin_verify":
 elif st.session_state.page == "forgot_step1":
     st.markdown('<div class="heading-box">SECURITY RECOVERY (SECURE OTP)</div>', unsafe_allow_html=True)
     with st.container(border=True):
-        st.markdown("<p style='color:#FFFFFF;'>ENTER REGISTERED MOBILE NUMBER FOR SECURE OTP VERIFICATION.</p>", unsafe_allow_html=True)
+        st.info("ENTER REGISTERED MOBILE NUMBER FOR SECURE OTP VERIFICATION.")
         input_mobile = st.text_input("REGISTERED MOBILE NUMBER", max_chars=10, placeholder="10-DIGIT NUMBER")
 
         if st.button("SEND SECURE OTP"):
@@ -400,7 +395,7 @@ elif st.session_state.page == "forgot_step1":
 elif st.session_state.page == "forgot_step2":
     st.markdown('<div class="heading-box">CREDENTIAL RESET & KDS MASTER OVERRIDE</div>', unsafe_allow_html=True)
     with st.container(border=True):
-        st.markdown("<p style='color:#FFFFFF;'>OTP VERIFIED. SELECT RECOVERY ACTION OR EXECUTE KDS OVERRIDE.</p>", unsafe_allow_html=True)
+        st.info("OTP VERIFIED. SELECT RECOVERY ACTION OR EXECUTE KDS OVERRIDE.")
         
         reset_choice = st.selectbox("SELECT ACTION", ["RESET PASSWORD", "RESET 6-DIGIT PIN", "FULL RECOVERY VIA KDS CODE"])
         
@@ -454,3 +449,12 @@ elif st.session_state.page == "forgot_step2":
                         admin_data["password_hash"] = hash_secret(new_p)
                         admin_data["pin_hash"] = hash_secret(new_pi)
                         save_admin_data(admin_data)
+                        st.success("MASTER OVERRIDE SUCCESSFUL!")
+                        st.session_state.current_user = None
+                        st.session_state.pin_verified = False
+                        st.session_state.page = "login"
+                        st.rerun()
+                else:
+                    st.error("INVALID SECRET KDS RECOVERY CODE")
+
+        if st.b
