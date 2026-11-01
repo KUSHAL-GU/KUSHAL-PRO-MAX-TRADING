@@ -13,7 +13,7 @@ if "page" not in st.session_state:
 if "users_db" not in st.session_state:
     st.session_state.users_db = {}
 
-# Clean CSS designed to prevent overflow and fit single screen (Compact Width Fix)
+# Desktop-friendly balanced width & clean styling
 st.markdown("""
 <style>
 .stApp {
@@ -22,87 +22,87 @@ st.markdown("""
     font-family: 'Segoe UI', Arial, sans-serif;
 }
 .block-container {
-    max-width: 400px !important;
-    padding: 10px 10px 15px !important;
+    max-width: 680px !important;
+    padding: 20px 25px 30px !important;
     margin: auto !important;
 }
 .main-header {
     background: #050D09;
     border: 2px solid #174B30;
-    border-radius: 12px;
-    padding: 10px;
+    border-radius: 14px;
+    padding: 15px;
     text-align: center;
-    margin-bottom: 8px;
-    box-shadow: 0 0 10px rgba(0, 255, 102, 0.08);
+    margin-bottom: 15px;
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.08);
 }
 .welcome-tag {
     background: #092318;
     border: 1px solid #00E875;
-    border-radius: 16px;
-    padding: 2px 10px;
+    border-radius: 18px;
+    padding: 3px 12px;
     color: #00E875;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     display: inline-block;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 .main-title {
     color: #00F080;
-    font-size: 17px;
+    font-size: 22px;
     font-weight: 750;
-    letter-spacing: 0.8px;
-    margin: 2px 0;
+    letter-spacing: 1px;
+    margin: 4px 0;
 }
 .sub-title {
     color: #008F49;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     margin: 0;
 }
 .heading-box {
     background: #0B2015;
     border: 1px solid #17683B;
-    border-radius: 6px;
-    padding: 6px;
+    border-radius: 8px;
+    padding: 10px;
     text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     color: #00E875;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 750;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
 }
 div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #09170F;
     border: 1px solid #174B30;
-    border-radius: 10px;
-    padding: 8px 10px;
-    margin-bottom: 8px;
+    border-radius: 12px;
+    padding: 15px 18px;
+    margin-bottom: 12px;
 }
 .stTextInput label {
     color: #00C968 !important;
-    font-size: 10px !important;
+    font-size: 11px !important;
     font-weight: 700 !important;
 }
 .stTextInput input {
     background: #10271A !important;
     color: #00F080 !important;
     border: 1px solid #17683B !important;
-    border-radius: 5px !important;
-    min-height: 30px !important;
-    padding: 4px 8px !important;
-    font-size: 12px !important;
+    border-radius: 6px !important;
+    min-height: 36px !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
 }
 .stButton button {
     width: 100% !important;
-    min-height: 32px !important;
-    border-radius: 5px !important;
-    font-size: 11px !important;
+    min-height: 38px !important;
+    border-radius: 6px !important;
+    font-size: 12px !important;
     font-weight: 700 !important;
     border: 1px solid #17683B !important;
-    margin-top: 3px;
-    margin-bottom: 3px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 .stButton button[kind="primary"] {
     background: #00D875 !important;
@@ -116,13 +116,13 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 .footer-box {
     background: #08180F;
     border: 1px solid #174B30;
-    border-radius: 5px;
-    padding: 4px;
+    border-radius: 6px;
+    padding: 8px;
     text-align: center;
     color: #008F49;
-    font-size: 9px;
-    letter-spacing: 0.8px;
-    margin-top: 6px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    margin-top: 10px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -158,7 +158,7 @@ if st.session_state.page == "login":
             st.session_state.page = "register"
             st.rerun()
             
-        st.markdown('<p style="text-align:center; color:#008F49; font-size:10px; margin-top:3px;">NEW USER? REGISTER YOUR ACCOUNT</p>', unsafe_allow_html=True)
+        st.markdown('<p style="text-align:center; color:#008F49; font-size:11px; margin-top:5px;">NEW USER? REGISTER YOUR ACCOUNT</p>', unsafe_allow_html=True)
 
 elif st.session_state.page == "register":
     st.markdown('<div class="heading-box">CREATE NEW ACCOUNT</div>', unsafe_allow_html=True)
@@ -262,10 +262,10 @@ elif st.session_state.page == "dashboard":
     with st.container(border=True):
         st.success(f"WELCOME {st.session_state.current_user.upper()}")
         st.markdown("""
-        <div style="background:#10271A; border:1px solid #17683B; border-radius:8px; padding:10px; text-align:center;">
-            <h3 style="color:#00F080; margin-bottom:3px; font-size:15px;">KUSHAL PRO MAX ENGINE</h3>
-            <p style="color:#008F49; font-size:11px; margin-bottom:3px;">ADVANCED FINANCIAL ANALYTICS</p>
-            <p style="color:#00E875; font-size:10px;">● TERMINAL ACTIVE</p>
+        <div style="background:#10271A; border:1px solid #17683B; border-radius:10px; padding:15px; text-align:center;">
+            <h3 style="color:#00F080; margin-bottom:5px; font-size:16px;">KUSHAL PRO MAX ENGINE</h3>
+            <p style="color:#008F49; font-size:12px; margin-bottom:5px;">ADVANCED FINANCIAL ANALYTICS</p>
+            <p style="color:#00E875; font-size:11px;">● TERMINAL ACTIVE</p>
         </div>
         """, unsafe_allow_html=True)
         if st.button("DISCONNECT / LOGOUT", type="primary"):
