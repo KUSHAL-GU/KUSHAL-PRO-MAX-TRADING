@@ -9,7 +9,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Configuration File Path for Single Admin Security
 DB_FILE = "admin_config.json"
 
 def load_admin_data():
@@ -153,36 +152,51 @@ st.markdown("""
 <div class="main-header">
     <div class="welcome-tag">WELCOME TO</div>
     <div class="main-title">KUSHAL PRO MAX TRADING</div>
-    <div class="sub-title">SINGLE USER SECURE TERMINAL</div>
+    <div class="sub-title">SECURE TERMINAL GATEWAY</div>
 </div>
 """, unsafe_allow_html=True)
 
-# ----------------- REGISTRATION (First Time Setup) -----------------
+# ----------------- INITIAL SETUP (First Time Only) -----------------
 if admin_data is None:
     st.markdown('<div class="heading-box">INITIAL MASTER SETUP</div>', unsafe_allow_html=True)
     with st.container(border=True):
-        st.info("SYSTEM NOTICE: NO MASTER USER FOUND. SET UP YOUR SINGLE ACCOUNT NOW.")
+        st.info("SET UP YOUR PERMANENT MASTER ACCOUNT & 6-DIGIT PIN.")
         new_user = st.text_input("CREATE MASTER USER ID", placeholder="ENTER YOUR USER ID")
-        new_pwd = st.text_input("CREATE PASSWORD", type="password", placeholder="ENTER SECURE PASSWORD")
+        new_pwd = st.text_input("CREATE PASSWORD", type="password", placeholder="ENTER SECURE PASSWORD (MIN 8 CHARS)")
         confirm_pwd = st.text_input("CONFIRM PASSWORD", type="password", placeholder="RE-ENTER PASSWORD")
-        kds_code = st.text_input("RECOVERY KDS CODE", type="password", placeholder="CREATE A SECRET RECOVERY PHRASE")
+        kds_code = st.text_input("SECRET KDS RECOVERY CODE", type="password", placeholder="USED FOR PASSWORD/ID RECOVERY")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            terminal_pin = st.text_input("6-DIGIT TERMINAL PIN", type="password", max_chars=6, placeholder="6 DIGITS")
+        with col2:
+            confirm_pin = st.text_input("CONFIRM 6-DIGIT PIN", type="password", max_chars=6, placeholder="RE-ENTER 6 DIGITS")
 
         if st.button("CREATE MASTER ACCOUNT →", type="primary"):
-            if not all([new_user, new_pwd, confirm_pwd, kds_code]):
-                st.error("PLEASE FILL ALL FIELDS")
+            if not all([new_user, new_pwd, confirm_pwd, kds_code, terminal_pin, confirm_pin]):
+                st.error("PLEASE FILL ALL REQUIRED FIELDS")
             elif len(new_pwd) < 8:
                 st.error("PASSWORD MUST BE AT LEAST 8 CHARACTERS")
             elif new_pwd != confirm_pwd:
                 st.error("PASSWORDS DO NOT MATCH")
+            elif not terminal_pin.isdigit() or len(terminal_pin) != 6:
+                st.error("TERMINAL PIN MUST BE EXACTLY 6 DIGITS")
+            elif terminal_pin != confirm_pin:
+                st.error("6-DIGIT PINS DO NOT MATCH")
             else:
                 data = {
                     "user_id": new_user,
                     "password": new_pwd,
-                    "kds": kds_code
+                    "kds": kds_code,
+                    "pin": terminal_pin
                 }
                 save_admin_data(data)
-                st.success("MASTER ACCOUNT CREATED & LOCKED! SYSTEM IS READY.")
+                st.success("MASTER ACCOUNT CREATED & LOCKED SECURELY!")
                 st.rerun()
+
+        if st.button("← BACK TO LOGIN / BYPASS"):
+            st.session_state.page = "login"
+            st.rerun()
 
 # ----------------- LOGIN PAGE -----------------
 elif st.session_state.page == "login":
@@ -194,55 +208,70 @@ elif st.session_state.page == "login":
         if st.button("AUTHENTICATE →", type="primary"):
             if user_id == admin_data["user_id"] and password == admin_data["password"]:
                 st.session_state.current_user = user_id
-                st.session_state.page = "otp"
+                st.session_state.page = "pin_verify"
                 st.rerun()
             else:
                 st.error("ACCESS DENIED: INVALID USER ID OR PASSWORD")
 
-        if st.button("FORGOT PASSWORD / RECOVER"):
+        if st.button("FORGOT USER ID OR PASSWORD?"):
             st.session_state.page = "forgot"
             st.rerun()
 
-# ----------------- 2FA OTP -----------------
-elif st.session_state.page == "otp":
-    st.markdown('<div class="heading-box">TWO FACTOR AUTHENTICATION</div>', unsafe_allow_html=True)
+# ----------------- 6-DIGIT PIN GATEWAY -----------------
+elif st.session_state.page == "pin_verify":
+    st.markdown('<div class="heading-box">ENTER 6-DIGIT TERMINAL PIN</div>', unsafe_allow_html=True)
     with st.container(border=True):
-        st.info("SECURITY VERIFICATION | DEMO OTP: 1234")
-        otp_input = st.text_input("ENTER 4 DIGIT OTP", type="password")
-        if st.button("VERIFY & LAUNCH TERMINAL →", type="primary"):
-            if otp_input == "1234":
+        st.info("ENTER YOUR 6-DIGIT SECURITY PIN TO UNLOCK THE TERMINAL.")
+        pin_input = st.text_input("6-DIGIT PIN CODE", type="password", max_chars=6, placeholder="••••••")
+        
+        if st.button("UNLOCK TERMINAL →", type="primary"):
+            if pin_input == admin_data["pin"]:
                 st.session_state.page = "dashboard"
                 st.rerun()
             else:
-                st.error("INVALID OTP")
-        if st.button("CANCEL LOGIN"):
+                st.error("INVALID 6-DIGIT PIN")
+                
+        if st.button("← CANCEL / BACK TO LOGIN"):
+            st.session_state.current_user = None
             st.session_state.page = "login"
             st.rerun()
 
-# ----------------- FORGOT PASSWORD -----------------
+# ----------------- FORGOT / RECOVERY PAGE -----------------
 elif st.session_state.page == "forgot":
-    st.markdown('<div class="heading-box">PASSWORD RESET ENGINE</div>', unsafe_allow_html=True)
+    st.markdown('<div class="heading-box">ACCOUNT RECOVERY & ASSISTANCE</div>', unsafe_allow_html=True)
     with st.container(border=True):
-        u_id = st.text_input("ENTER MASTER USER ID")
-        kds_in = st.text_input("ENTER SECRET RECOVERY KDS CODE", type="password")
-        new_pwd = st.text_input("ENTER NEW PASSWORD", type="password")
-        confirm_pwd = st.text_input("CONFIRM NEW PASSWORD", type="password")
+        option = st.selectbox("SELECT RECOVERY ACTION", ["RESET PASSWORD", "RETRIEVE USER ID"])
+        st.markdown("---")
         
-        if st.button("UPDATE PASSWORD →", type="primary"):
-            if u_id == admin_data["user_id"] and kds_in == admin_data["kds"]:
-                if len(new_pwd) < 8:
-                    st.error("PASSWORD MUST BE AT LEAST 8 CHARACTERS")
-                elif new_pwd != confirm_pwd:
-                    st.error("PASSWORDS DO NOT MATCH")
+        if option == "RESET PASSWORD":
+            u_id = st.text_input("ENTER MASTER USER ID")
+            kds_in = st.text_input("ENTER SECRET KDS RECOVERY CODE", type="password")
+            new_pwd = st.text_input("ENTER NEW PASSWORD", type="password", placeholder="MIN 8 CHARACTERS")
+            confirm_pwd = st.text_input("CONFIRM NEW PASSWORD", type="password", placeholder="RE-ENTER NEW PASSWORD")
+            
+            if st.button("UPDATE PASSWORD →", type="primary"):
+                if u_id == admin_data["user_id"] and kds_in == admin_data["kds"]:
+                    if len(new_pwd) < 8:
+                        st.error("PASSWORD MUST BE AT LEAST 8 CHARACTERS")
+                    elif new_pwd != confirm_pwd:
+                        st.error("PASSWORDS DO NOT MATCH")
+                    else:
+                        admin_data["password"] = new_pwd
+                        save_admin_data(admin_data)
+                        st.success("PASSWORD UPDATED SUCCESSFULLY! PLEASE LOGIN.")
+                        st.session_state.page = "login"
+                        st.rerun()
                 else:
-                    admin_data["password"] = new_pwd
-                    save_admin_data(admin_data)
-                    st.success("PASSWORD UPDATED SUCCESSFULLY! PLEASE LOGIN.")
-                    st.session_state.page = "login"
-                    st.rerun()
-            else:
-                st.error("RECOVERY AUTHORIZATION FAILED")
-                
+                    st.error("RECOVERY AUTHORIZATION FAILED")
+                    
+        elif option == "RETRIEVE USER ID":
+            kds_in = st.text_input("ENTER SECRET KDS RECOVERY CODE", type="password")
+            if st.button("RETRIEVE USER ID →", type="primary"):
+                if kds_in == admin_data["kds"]:
+                    st.success(f"YOUR REGISTERED USER ID IS: {admin_data['user_id']}")
+                else:
+                    st.error("INVALID KDS RECOVERY CODE")
+
         if st.button("← RETURN TO LOGIN"):
             st.session_state.page = "login"
             st.rerun()
@@ -255,8 +284,8 @@ elif st.session_state.page == "dashboard":
         st.markdown("""
         <div style="background:#10271A; border:1px solid #17683B; border-radius:10px; padding:15px; text-align:center;">
             <h3 style="color:#00F080; margin-bottom:5px; font-size:16px;">KUSHAL PRO MAX ENGINE</h3>
-            <p style="color:#008F49; font-size:12px; margin-bottom:5px;">PRIVATE HIGH-SPEED ANALYTICS</p>
-            <p style="color:#00E875; font-size:11px;">● SYSTEM LOCKED & ENCRYPTED</p>
+            <p style="color:#008F49; font-size:12px; margin-bottom:5px;">PRIVATE HIGH-SPEED ANALYTICS & 6-DIGIT PIN UNLOCKED</p>
+            <p style="color:#00E875; font-size:11px;">● SYSTEM FULLY SECURE</p>
         </div>
         """, unsafe_allow_html=True)
         if st.button("DISCONNECT & LOCK TERMINAL", type="primary"):
@@ -266,6 +295,6 @@ elif st.session_state.page == "dashboard":
 
 st.markdown("""
 <div class="footer-box">
-    ● SYSTEM ONLINE | SINGLE ADMIN MODE | KUSHAL PRO MAX TRADING © 2026
+    ● SYSTEM ONLINE | SINGLE ADMIN & 6-DIGIT PIN SECURED | KUSHAL PRO MAX TRADING © 2026
 </div>
 """, unsafe_allow_html=True)
