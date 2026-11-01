@@ -457,4 +457,110 @@ elif st.session_state.page == "forgot_step2":
                 else:
                     st.error("INVALID SECRET KDS RECOVERY CODE")
 
-        if st.b
+        if st.button("← RETURN TO LOGIN"):
+            st.session_state.page = "login"
+            st.rerun()
+
+# ==================== 6. DASHBOARD WITH MARKET SELECTOR BOX ====================
+elif st.session_state.page == "dashboard":
+    if not st.session_state.current_user or not st.session_state.pin_verified:
+        st.error("UNAUTHORIZED ACCESS DETECTED.")
+        st.session_state.current_user = None
+        st.session_state.pin_verified = False
+        st.session_state.page = "login"
+        st.rerun()
+
+    st.markdown('<div class="heading-box">TRADING TERMINAL ACTIVE</div>', unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown(f"<h3 style='color:#00F080; margin-top:0;'>WELCOME BACK, {admin_data['user_id'].upper()}</h3>", unsafe_allow_html=True)
+        
+        # MARKET SELECTOR BOX (Indian Market, Crypto Market, US Market)
+        st.markdown("<p style='color:#00E875; font-weight:700; margin-bottom:10px;'>SELECT TRADING MARKET:</p>", unsafe_allow_html=True)
+        
+        m_col1, m_col2, m_col3 = st.columns(3)
+        with m_col1:
+            if st.button("🇮🇳 INDIAN MARKET", type="primary" if st.session_state.selected_market == "Indian Market" else "secondary"):
+                st.session_state.selected_market = "Indian Market"
+                st.rerun()
+        with m_col2:
+            if st.button("🪙 CRYPTO MARKET", type="primary" if st.session_state.selected_market == "Crypto Market" else "secondary"):
+                st.session_state.selected_market = "Crypto Market"
+                st.rerun()
+        with m_col3:
+            if st.button("🇺🇸 US MARKET", type="primary" if st.session_state.selected_market == "US Market" else "secondary"):
+                st.session_state.selected_market = "US Market"
+                st.rerun()
+
+        st.markdown(f"""
+        <div style="background:#10271A; border:1px solid #17683B; border-radius:10px; padding:20px; text-align:center; margin-top:15px; margin-bottom:15px;">
+            <h4 style="color:#00F080; margin-top:0;">ACTIVE DASHBOARD: {st.session_state.selected_market.upper()}</h4>
+            <p style="color:#008F49; font-size:14px; margin-bottom:5px;">REAL-TIME DATA STREAM & ANALYTICS READY</p>
+            <p style="color:#00E875; font-size:12px;">● KUSHAL PRO MAX ENGINE SECURED</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Security & Credentials Settings Expander
+        with st.expander("⚙️ SECURITY & CREDENTIALS SETTINGS"):
+            st.info("UPDATE YOUR PASSWORD OR 6-DIGIT PIN SECURELY.")
+            change_option = st.selectbox("SELECT ACTION", ["CHANGE PASSWORD", "CHANGE 6-DIGIT PIN", "VIEW SECURITY AUDIT LOGS"])
+            
+            if change_option == "CHANGE PASSWORD":
+                old_pwd = st.text_input("CURRENT PASSWORD", type="password")
+                new_pwd = st.text_input("NEW PASSWORD (MIN 8 CHARS)", type="password")
+                conf_pwd = st.text_input("CONFIRM NEW PASSWORD", type="password")
+                if st.button("UPDATE PASSWORD NOW"):
+                    if not verify_secret(old_pwd, admin_data["password_hash"]):
+                        st.error("CURRENT PASSWORD IS INCORRECT")
+                    elif len(new_pwd) < 8:
+                        st.error("NEW PASSWORD MUST BE AT LEAST 8 CHARACTERS")
+                    elif new_pwd != conf_pwd:
+                        st.error("NEW PASSWORDS DO NOT MATCH")
+                    else:
+                        admin_data["password_hash"] = hash_secret(new_pwd)
+                        save_admin_data(admin_data)
+                        st.success("PASSWORD UPDATED! SESSION TERMINATED.")
+                        st.session_state.current_user = None
+                        st.session_state.pin_verified = False
+                        st.session_state.page = "login"
+                        st.rerun()
+            
+            elif change_option == "CHANGE 6-DIGIT PIN":
+                old_pin = st.text_input("CURRENT 6-DIGIT PIN", type="password", max_chars=6)
+                new_pin = st.text_input("NEW 6-DIGIT PIN", type="password", max_chars=6)
+                conf_pin = st.text_input("CONFIRM NEW 6-DIGIT PIN", type="password", max_chars=6)
+                if st.button("UPDATE PIN NOW"):
+                    if not verify_secret(old_pin, admin_data["pin_hash"]):
+                        st.error("CURRENT PIN IS INCORRECT")
+                    elif not new_pin.isdigit() or len(new_pin) != 6:
+                        st.error("NEW PIN MUST BE EXACTLY 6 NUMERIC DIGITS")
+                    elif new_pin != conf_pin:
+                        st.error("NEW PINS DO NOT MATCH")
+                    else:
+                        admin_data["pin_hash"] = hash_secret(new_pin)
+                        save_admin_data(admin_data)
+                        st.success("PIN UPDATED! SESSION TERMINATED.")
+                        st.session_state.current_user = None
+                        st.session_state.pin_verified = False
+                        st.session_state.page = "login"
+                        st.rerun()
+                        
+            elif change_option == "VIEW SECURITY AUDIT LOGS":
+                st.markdown("### 🛡️ LIVE SECURITY EVENT LOGS")
+                if st.session_state.audit_logs:
+                    for log in reversed(st.session_state.audit_logs[-10:]):
+                        st.code(log)
+                else:
+                    st.info("NO SECURITY EVENTS RECORDED.")
+
+        if st.button("DISCONNECT & LOCK TERMINAL", type="primary"):
+            log_security_event("LOGOUT", "User disconnected.")
+            st.session_state.current_user = None
+            st.session_state.pin_verified = False
+            st.session_state.page = "login"
+            st.rerun()
+
+st.markdown("""
+<div class="footer-box">
+    ● FULL SCREEN DESKTOP SECURE | KUSHAL PRO MAX TRADING © 2026
+</div>
+""", unsafe_allow_html=True)
