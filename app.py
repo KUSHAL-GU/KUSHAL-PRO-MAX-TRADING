@@ -9,47 +9,63 @@ from datetime import datetime, timedelta
 st.set_page_config(
     page_title="KUSHAL PRO MAX TRADING",
     page_icon="⚡",
-    layout="centered",
+    layout="wide",  # Full screen / Wide layout for desktop
     initial_sidebar_state="collapsed"
 )
 
 DB_FILE = "admin_config.json"
+BACKUP_FILE = "admin_config.json.bak"
 
 # ==================== SECURITY & CRYPTOGRAPHIC UTILS ====================
 
 def hash_secret(secret_text: str) -> str:
-    """Hash password, pin, or kds code securely using bcrypt."""
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(secret_text.encode('utf-8'), salt).decode('utf-8')
 
 def verify_secret(secret_text: str, hashed_text: str) -> bool:
-    """Verify plain secret against bcrypt hash safely."""
     try:
         return bcrypt.checkpw(secret_text.encode('utf-8'), hashed_text.encode('utf-8'))
     except Exception:
         return False
 
+def log_security_event(event_type: str, details: str):
+    if "audit_logs" not in st.session_state:
+        st.session_state.audit_logs = []
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    log_entry = f"[{timestamp}] [{event_type.upper()}] {details}"
+    st.session_state.audit_logs.append(log_entry)
+
 def load_admin_data():
-    """Safely load admin data with corruption handling."""
     if os.path.exists(DB_FILE):
         try:
             with open(DB_FILE, "r") as f:
                 return json.load(f)
         except json.JSONDecodeError:
-            st.error("CRITICAL SECURITY ERROR: CONFIGURATION DATABASE IS CORRUPTED.")
+            log_security_event("ERROR", "Primary database corrupted.")
+            if os.path.exists(BACKUP_FILE):
+                try:
+                    with open(BACKUP_FILE, "r") as bf:
+                        return json.load(bf)
+                except Exception:
+                    pass
             return None
         except Exception:
             return None
     return None
 
 def save_admin_data(data):
-    """Atomic write to prevent JSON file corruption during sudden crashes."""
     try:
+        if os.path.exists(DB_FILE):
+            if os.path.exists(BACKUP_FILE):
+                os.remove(BACKUP_FILE)
+            os.rename(DB_FILE, BACKUP_FILE)
+            
         dir_name = os.path.dirname(DB_FILE) or "."
         with tempfile.NamedTemporaryFile('w', dir=dir_name, delete=False) as tf:
             json.dump(data, tf)
             temp_name = tf.name
         os.replace(temp_name, DB_FILE)
+        log_security_event("INFO", "Master credentials updated successfully.")
     except Exception as e:
         st.error(f"DATABASE WRITE FAILED: {e}")
 
@@ -69,39 +85,41 @@ if "failed_pin_attempts" not in st.session_state:
 if "pin_lockout_time" not in st.session_state:
     st.session_state.pin_lockout_time = None
 if "otp_session" not in st.session_state:
-    st.session_state.otp_session = {"code": None, "expiry": None, "attempts": 0}
+    st.session_state.otp_session = {"hash": None, "expiry": None, "attempts": 0}
+if "selected_market" not in st.session_state:
+    st.session_state.selected_market = "Indian Market"
+if "audit_logs" not in st.session_state:
+    st.session_state.audit_logs = []
 
 admin_data = load_admin_data()
 
-# ==================== STYLING (Green & Black Theme + Upgraded Readability) ====================
+# ==================== STYLING (Black Background, Green Glow, White Text Inside Boxes) ====================
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Segoe+UI:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Segoe+UI:wght@400;600;700&display=swap');
 
 .stApp {
     background: 
-        radial-gradient(circle at 0% 0%, rgba(0, 200, 80, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 100% 0%, rgba(0, 200, 80, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 0% 100%, rgba(0, 200, 80, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 100% 100%, rgba(0, 200, 80, 0.15) 0%, transparent 45%),
-        #010503 !important;
-    color: #00A94F;
+        radial-gradient(circle at 0% 0%, rgba(0, 200, 80, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 100% 0%, rgba(0, 200, 80, 0.1) 0%, transparent 40%),
+        #010302 !important;
+    color: #FFFFFF !important;
     font-family: 'Segoe UI', Arial, sans-serif;
     background-attachment: fixed;
 }
 .block-container {
-    max-width: 1020px !important;
-    padding: 28px 36px 40px !important;
+    max-width: 1200px !important;
+    padding: 30px 40px 40px !important;
     margin: auto !important;
 }
 .main-header {
-    background: #050D09;
-    border: 2px solid #174B30;
+    background: #050B08;
+    border: 2px solid #00C968;
     border-radius: 14px;
-    padding: 18px;
+    padding: 20px;
     text-align: center;
-    margin-bottom: 18px;
-    box-shadow: 0 0 20px rgba(0, 255, 102, 0.1);
+    margin-bottom: 20px;
+    box-shadow: 0 0 25px rgba(0, 232, 117, 0.2);
 }
 .welcome-tag {
     background: #092318;
@@ -118,78 +136,89 @@ st.markdown("""
 .main-title {
     font-family: 'Orbitron', sans-serif !important;
     color: #00F080;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 800;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     margin: 4px 0;
-    text-shadow: 0 0 10px rgba(0, 240, 128, 0.4);
+    text-shadow: 0 0 12px rgba(0, 240, 128, 0.5);
 }
 .sub-title {
-    color: #008F49;
+    color: #00A94F;
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 1.5px;
     margin: 0;
 }
 .heading-box {
-    background: #0B2015;
-    border: 1px solid #17683B;
+    background: #07160F;
+    border: 1px solid #00A94F;
     border-radius: 8px;
     padding: 12px;
     text-align: center;
-    margin-bottom: 14px;
-    color: #00E875;
+    margin-bottom: 16px;
+    color: #00F080;
     font-size: 18px;
     font-weight: 700;
     letter-spacing: 1.5px;
 }
 div[data-testid="stVerticalBlockBorderWrapper"] {
-    background: #09170F;
-    border: 1px solid #174B30;
+    background: #060F0A !important;
+    border: 1px solid #174B30 !important;
     border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 14px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+/* White text inside boxes for maximum readability */
+p, span, label, div, .stMarkdown {
+    color: #FFFFFF !important;
 }
 .stTextInput label {
-    color: #00C968 !important;
+    color: #00E875 !important;
     font-size: 14px !important;
     font-weight: 700 !important;
 }
 .stTextInput input {
-    background: #10271A !important;
-    color: #00F080 !important;
-    border: 1px solid #17683B !important;
+    background: #020805 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #00A94F !important;
     border-radius: 6px !important;
-    min-height: 40px !important;
+    min-height: 42px !important;
     padding: 8px 14px !important;
     font-size: 15px !important;
 }
 .stButton button {
     width: 100% !important;
-    min-height: 42px !important;
+    min-height: 44px !important;
     border-radius: 6px !important;
     font-size: 14px !important;
     font-weight: 700 !important;
-    border: 1px solid #17683B !important;
+    border: 1px solid #00A94F !important;
+    background: #0D2B1D !important;
+    color: #FFFFFF !important;
     margin-top: 6px;
     margin-bottom: 6px;
+    transition: 0.2s ease;
+}
+.stButton button:hover {
+    border-color: #00F080 !important;
+    box-shadow: 0 0 10px rgba(0,240,128,0.4);
 }
 .stButton button[kind="primary"] {
-    background: #00D875 !important;
-    color: #031008 !important;
+    background: #00C968 !important;
+    color: #020805 !important;
     border: 1px solid #00F080 !important;
 }
 .footer-box {
-    background: #08180F;
+    background: #050B08;
     border: 1px solid #174B30;
     border-radius: 6px;
     padding: 10px;
     text-align: center;
-    color: #008F49;
+    color: #00A94F;
     font-size: 12px;
     letter-spacing: 1px;
-    margin-top: 15px;
+    margin-top: 20px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -199,7 +228,7 @@ st.markdown("""
 <div class="main-header">
     <div class="welcome-tag">WELCOME TO</div>
     <div class="main-title">KUSHAL PRO MAX TRADING</div>
-    <div class="sub-title">SECURE PRODUCTION-GRADE AUDITED TERMINAL</div>
+    <div class="sub-title">DESKTOP TRADING TERMINAL & ANALYTICS</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -207,7 +236,7 @@ st.markdown("""
 if admin_data is None:
     st.markdown('<div class="heading-box">INITIAL MASTER SETUP</div>', unsafe_allow_html=True)
     with st.container(border=True):
-        st.info("ESTABLISH SECURE MASTER CREDENTIALS (BCRYPT HASHED).")
+        st.markdown("<p style='color:#00E875; font-weight:600;'>ESTABLISH SECURE MASTER CREDENTIALS.</p>", unsafe_allow_html=True)
         new_user = st.text_input("CREATE MASTER USER ID", placeholder="ENTER UNIQUE USER ID")
         mobile_no = st.text_input("MOBILE NUMBER (10 DIGITS)", placeholder="10-DIGIT MOBILE NUMBER", max_chars=10)
         new_pwd = st.text_input("CREATE PASSWORD (MIN 8 CHARS)", type="password", placeholder="SECURE PASSWORD")
@@ -242,6 +271,7 @@ if admin_data is None:
                     "pin_hash": hash_secret(terminal_pin)
                 }
                 save_admin_data(secure_data)
+                log_security_event("SETUP", "Master account established.")
                 st.success("MASTER ACCOUNT CREATED & SECURED SUCCESSFULLY!")
                 st.rerun()
 
@@ -249,7 +279,6 @@ if admin_data is None:
 elif st.session_state.page == "login":
     st.markdown('<div class="heading-box">SECURE MASTER LOGIN</div>', unsafe_allow_html=True)
     
-    # Brute-force lockout check
     if st.session_state.lockout_time and datetime.now() < st.session_state.lockout_time:
         remaining = int((st.session_state.lockout_time - datetime.now()).total_seconds())
         st.error(f"ACCOUNT TEMPORARILY LOCKED. TRY AGAIN IN {remaining} SECONDS.")
@@ -266,16 +295,17 @@ elif st.session_state.page == "login":
                 if user_id.strip() == admin_data["user_id"] and verify_secret(password, admin_data["password_hash"]):
                     st.session_state.failed_login_attempts = 0
                     st.session_state.current_user = user_id.strip()
+                    log_security_event("LOGIN_SUCCESS", f"User logged in: {user_id.strip()}")
                     st.session_state.page = "pin_verify"
                     st.rerun()
                 else:
                     st.session_state.failed_login_attempts += 1
-                    rem_attempts = 5 - st.session_state.failed_login_attempts
+                    rem = 5 - st.session_state.failed_login_attempts
                     if st.session_state.failed_login_attempts >= 5:
                         st.session_state.lockout_time = datetime.now() + timedelta(minutes=5)
                         st.error("SECURITY ALERT: 5 FAILED LOGIN ATTEMPTS. LOCKED FOR 5 MINUTES.")
                     else:
-                        st.error(f"ACCESS DENIED: INVALID CREDENTIALS. {rem_attempts} ATTEMPTS REMAINING.")
+                        st.error(f"ACCESS DENIED: INVALID CREDENTIALS. {rem} ATTEMPTS REMAINING.")
 
             if st.button("FORGOT PASSWORD / ID / PIN?"):
                 st.session_state.page = "forgot_step1"
@@ -287,14 +317,14 @@ elif st.session_state.page == "pin_verify":
     
     if st.session_state.pin_lockout_time and datetime.now() < st.session_state.pin_lockout_time:
         rem_pin = int((st.session_state.pin_lockout_time - datetime.now()).total_seconds())
-        st.error(f"PIN GATEWAY LOCKED DUE TO REPEATED INCORRECT PINS. TRY AGAIN IN {rem_pin} SECONDS.")
+        st.error(f"PIN GATEWAY LOCKED. TRY AGAIN IN {rem_pin} SECONDS.")
     else:
         if st.session_state.pin_lockout_time and datetime.now() >= st.session_state.pin_lockout_time:
             st.session_state.pin_lockout_time = None
             st.session_state.failed_pin_attempts = 0
 
         with st.container(border=True):
-            st.info("ENTER YOUR 6-DIGIT SECURITY PIN TO UNLOCK THE TERMINAL.")
+            st.markdown("<p style='color:#FFFFFF;'>ENTER YOUR 6-DIGIT SECURITY PIN TO UNLOCK THE TERMINAL.</p>", unsafe_allow_html=True)
             pin_input = st.text_input("6-DIGIT PIN CODE", type="password", max_chars=6, placeholder="••••••")
             
             col1, col2 = st.columns(2)
@@ -302,17 +332,18 @@ elif st.session_state.page == "pin_verify":
                 if st.button("UNLOCK TERMINAL →", type="primary"):
                     if verify_secret(pin_input, admin_data["pin_hash"]):
                         st.session_state.failed_pin_attempts = 0
-                        st.session_state.pin_verified = True  # Independent PIN Authorization State
+                        st.session_state.pin_verified = True
+                        log_security_event("PIN_SUCCESS", "Terminal unlocked.")
                         st.session_state.page = "dashboard"
                         st.rerun()
                     else:
                         st.session_state.failed_pin_attempts += 1
-                        rem_pins = 5 - st.session_state.failed_pin_attempts
+                        rem_p = 5 - st.session_state.failed_pin_attempts
                         if st.session_state.failed_pin_attempts >= 5:
                             st.session_state.pin_lockout_time = datetime.now() + timedelta(minutes=5)
-                            st.error("SECURITY LOCKOUT: 5 INCORRECT PIN ATTEMPTS. LOCKED FOR 5 MINUTES.")
+                            st.error("SECURITY LOCKOUT: 5 INCORRECT PINS. LOCKED FOR 5 MINUTES.")
                         else:
-                            st.error(f"INVALID 6-DIGIT PIN. {rem_pins} ATTEMPTS REMAINING.")
+                            st.error(f"INVALID 6-DIGIT PIN. {rem_p} ATTEMPTS REMAINING.")
             with col2:
                 if st.button("FORGOT PIN?"):
                     st.session_state.page = "forgot_step1"
@@ -328,34 +359,33 @@ elif st.session_state.page == "pin_verify":
 elif st.session_state.page == "forgot_step1":
     st.markdown('<div class="heading-box">SECURITY RECOVERY (SECURE OTP)</div>', unsafe_allow_html=True)
     with st.container(border=True):
-        st.info("ENTER REGISTERED MOBILE NUMBER FOR SECURE OTP VERIFICATION.")
+        st.markdown("<p style='color:#FFFFFF;'>ENTER REGISTERED MOBILE NUMBER FOR SECURE OTP VERIFICATION.</p>", unsafe_allow_html=True)
         input_mobile = st.text_input("REGISTERED MOBILE NUMBER", max_chars=10, placeholder="10-DIGIT NUMBER")
 
         if st.button("SEND SECURE OTP"):
             if input_mobile.strip() == admin_data["mobile"]:
-                # Cryptographically secure random 6-digit OTP using secrets module
-                secure_random_otp = "".join([str(secrets.randbelow(10)) for _ in range(6)])
+                raw_otp = "".join([str(secrets.randbelow(10)) for _ in range(6)])
+                otp_hash_val = hash_secret(raw_otp)
                 expiry_time = datetime.now() + timedelta(minutes=5)
                 st.session_state.otp_session = {
-                    "code": secure_random_otp,
+                    "hash": otp_hash_val,
                     "expiry": expiry_time,
                     "attempts": 0
                 }
-                st.success(f"SECURE OTP GENERATED! [TEST OTP: {secure_random_otp}] (Valid for 5 mins)")
+                st.success(f"SECURE OTP GENERATED! [TEST OTP: {raw_otp}] (Valid for 5 mins)")
             else:
                 st.error("ERROR: MOBILE NUMBER NOT FOUND IN MASTER RECORDS")
 
-        if st.session_state.otp_session["code"] is not None:
+        if st.session_state.otp_session["hash"] is not None:
             otp_input = st.text_input("ENTER 6-DIGIT OTP", type="password", max_chars=6)
             if st.button("VERIFY OTP & PROCEED →", type="primary"):
                 current_time = datetime.now()
                 if current_time > st.session_state.otp_session["expiry"]:
                     st.error("OTP HAS EXPIRED. PLEASE REQUEST A NEW OTP.")
                 elif st.session_state.otp_session["attempts"] >= 3:
-                    st.error("MAXIMUM OTP ATTEMPTS EXCEEDED. REQUEST NEW OTP.")
-                elif otp_input.strip() == st.session_state.otp_session["code"]:
-                    # Invalidate OTP immediately after successful use
-                    st.session_state.otp_session = {"code": None, "expiry": None, "attempts": 0}
+                    st.error("MAXIMUM OTP ATTEMPTS EXCEEDED.")
+                elif verify_secret(otp_input.strip(), st.session_state.otp_session["hash"]):
+                    st.session_state.otp_session = {"hash": None, "expiry": None, "attempts": 0}
                     st.session_state.page = "forgot_step2"
                     st.rerun()
                 else:
@@ -363,7 +393,6 @@ elif st.session_state.page == "forgot_step1":
                     st.error(f"INVALID OTP. ATTEMPT {st.session_state.otp_session['attempts']}/3")
 
         if st.button("← RETURN TO LOGIN"):
-            st.session_state.otp_session = {"code": None, "expiry": None, "attempts": 0}
             st.session_state.page = "login"
             st.rerun()
 
@@ -371,7 +400,7 @@ elif st.session_state.page == "forgot_step1":
 elif st.session_state.page == "forgot_step2":
     st.markdown('<div class="heading-box">CREDENTIAL RESET & KDS MASTER OVERRIDE</div>', unsafe_allow_html=True)
     with st.container(border=True):
-        st.info("OTP VERIFIED SUCCESSFULLY. SELECT RECOVERY ACTION OR EXECUTE KDS OVERRIDE.")
+        st.markdown("<p style='color:#FFFFFF;'>OTP VERIFIED. SELECT RECOVERY ACTION OR EXECUTE KDS OVERRIDE.</p>", unsafe_allow_html=True)
         
         reset_choice = st.selectbox("SELECT ACTION", ["RESET PASSWORD", "RESET 6-DIGIT PIN", "FULL RECOVERY VIA KDS CODE"])
         
@@ -386,7 +415,7 @@ elif st.session_state.page == "forgot_step2":
                 else:
                     admin_data["password_hash"] = hash_secret(new_p)
                     save_admin_data(admin_data)
-                    st.success("PASSWORD UPDATED SUCCESSFULLY! PLEASE LOGIN.")
+                    st.success("PASSWORD UPDATED! PLEASE LOGIN.")
                     st.session_state.current_user = None
                     st.session_state.pin_verified = False
                     st.session_state.page = "login"
@@ -394,7 +423,7 @@ elif st.session_state.page == "forgot_step2":
                     
         elif reset_choice == "RESET 6-DIGIT PIN":
             new_pi = st.text_input("NEW 6-DIGIT PIN", type="password", max_chars=6)
-            conf_pi = st.text_input("CONFIRM NEW 6-DIGIT PIN", type="password", max_chars=6)
+            conf_pi = st.text_input("CONFIRM 6-DIGIT PIN", type="password", max_chars=6)
             if st.button("UPDATE PIN NOW", type="primary"):
                 if not new_pi.isdigit() or len(new_pi) != 6:
                     st.error("PIN MUST BE EXACTLY 6 NUMERIC DIGITS")
@@ -403,7 +432,7 @@ elif st.session_state.page == "forgot_step2":
                 else:
                     admin_data["pin_hash"] = hash_secret(new_pi)
                     save_admin_data(admin_data)
-                    st.success("6-DIGIT PIN UPDATED SUCCESSFULLY! PLEASE LOGIN.")
+                    st.success("6-DIGIT PIN UPDATED! PLEASE LOGIN.")
                     st.session_state.current_user = None
                     st.session_state.pin_verified = False
                     st.session_state.page = "login"
@@ -419,32 +448,9 @@ elif st.session_state.page == "forgot_step2":
             if st.button("EXECUTE MASTER KDS OVERRIDE →", type="primary"):
                 if verify_secret(kds_input, admin_data["kds_hash"]):
                     if not all([new_uid, new_p, new_pi]) or len(new_p) < 8 or not new_pi.isdigit() or len(new_pi) != 6:
-                        st.error("PLEASE PROVIDE VALID USER ID, PASSWORD (MIN 8) & 6-DIGIT NUMERIC PIN")
+                        st.error("PLEASE PROVIDE VALID DETAILS")
                     else:
                         admin_data["user_id"] = new_uid.strip()
                         admin_data["password_hash"] = hash_secret(new_p)
                         admin_data["pin_hash"] = hash_secret(new_pi)
                         save_admin_data(admin_data)
-                        st.success("MASTER OVERRIDE SUCCESSFUL! ALL CREDENTIALS UPDATED.")
-                        st.session_state.current_user = None
-                        st.session_state.pin_verified = False
-                        st.session_state.page = "login"
-                        st.rerun()
-                else:
-                    st.error("INVALID SECRET KDS RECOVERY CODE")
-
-        if st.button("← RETURN TO LOGIN"):
-            st.session_state.page = "login"
-            st.rerun()
-
-# ==================== 6. DASHBOARD & SECURE SETTINGS ====================
-elif st.session_state.page == "dashboard":
-    # Strict Centralized Authorization Guard
-    if not st.session_state.current_user or not st.session_state.pin_verified:
-        st.error("UNAUTHORIZED ACCESS DETECTED. REDIRECTING TO LOGIN.")
-        st.session_state.current_user = None
-        st.session_state.pin_verified = False
-        st.session_state.page = "login"
-        st.rerun()
-
-    st.markdown('<div class="heading-box">TRADING TERMINAL ACTI
