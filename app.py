@@ -499,18 +499,33 @@ elif st.session_state.page == "dashboard":
         </div>
         """, unsafe_allow_html=True)
         
-        # 3টি মার্কেটের নিজস্ব কনটেন্ট রেন্ডার করার লজিক
+        # 3টি মার্কেটের আসল চার্ট এবং টার্মিনাল রেন্ডার করার লজিক
         if st.session_state.selected_market == "Indian Market":
             st.markdown("### 🇮🇳 Indian Stock Market Terminal (NSE / BSE)")
-            st.info("এখানে আপনার ইন্ডিয়ান স্টক মার্কেট এবং রিয়েল-টাইম চার্ট ডেটা প্রদর্শিত হচ্ছে।")
+            st.markdown("""
+            <div style="background:#0b0f19; border:1px solid #17683B; border-radius:10px; padding:15px; text-align:center;">
+                <p style="color:#00E875; font-size:14px; font-weight:600; margin-bottom:10px;">ইন্ডিয়ান স্টক মার্কেটের লাইভ ট্রেডিংভিউ চার্ট টার্মিনাল</p>
+                <iframe src="https://s.tradingview.com/widgetembed/?symbol=BSE:SENSEX&interval=D&theme=dark" width="100%" height="450" frameborder="0"></iframe>
+            </div>
+            """, unsafe_allow_html=True)
             
         elif st.session_state.selected_market == "Crypto Market":
             st.markdown("### 🪙 Crypto Currency Live Terminal")
-            st.info("এখানে ক্রিপ্টোকারেন্সি প্রাইস ফিড এবং লাইভ চার্ট প্রদর্শিত হচ্ছে।")
+            st.markdown("""
+            <div style="background:#0b0f19; border:1px solid #17683B; border-radius:10px; padding:15px; text-align:center;">
+                <p style="color:#00E875; font-size:14px; font-weight:600; margin-bottom:10px;">ক্রিপ্টোকারেন্সি লাইভ প্রাইস ফিড চার্ট</p>
+                <iframe src="https://s.tradingview.com/widgetembed/?symbol=BINANCE:BTCUSDT&interval=D&theme=dark" width="100%" height="450" frameborder="0"></iframe>
+            </div>
+            """, unsafe_allow_html=True)
             
         elif st.session_state.selected_market == "US Market":
             st.markdown("### 🇺🇸 US Stock Market Terminal (NASDAQ / NYSE)")
-            st.info("এখানে ইউএস মার্কেট ও গ্লোবাল ইনডেক্স চার্ট প্রদর্শিত হচ্ছে।")
+            st.markdown("""
+            <div style="background:#0b0f19; border:1px solid #17683B; border-radius:10px; padding:15px; text-align:center;">
+                <p style="color:#00E875; font-size:14px; font-weight:600; margin-bottom:10px;">ইউএস মার্কেট গ্লোবাল ইনডেক্স চার্ট</p>
+                <iframe src="https://s.tradingview.com/widgetembed/?symbol=NASDAQ:AAPL&interval=D&theme=dark" width="100%" height="450" frameborder="0"></iframe>
+            </div>
+            """, unsafe_allow_html=True)
 
         # Security & Credentials Settings Expander
         with st.expander("⚙️ SECURITY & CREDENTIALS SETTINGS"):
