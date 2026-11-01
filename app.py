@@ -13,17 +13,23 @@ if "page" not in st.session_state:
 if "users_db" not in st.session_state:
     st.session_state.users_db = {}
 
-# Desktop-friendly wider layout as requested
+# Custom CSS with Dark Background & Four Corner Green Glow Effect + Wider Desktop Layout
 st.markdown("""
 <style>
 .stApp {
-    background: #020805;
+    background: 
+        radial-gradient(circle at 0% 0%, rgba(0, 200, 80, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 100% 0%, rgba(0, 200, 80, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 0% 100%, rgba(0, 200, 80, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 100% 100%, rgba(0, 200, 80, 0.15) 0%, transparent 45%),
+        #010503 !important;
     color: #00A94F;
     font-family: 'Segoe UI', Arial, sans-serif;
+    background-attachment: fixed;
 }
 .block-container {
-    max-width: 820px !important;
-    padding: 22px 30px 35px !important;
+    max-width: 920px !important;
+    padding: 24px 32px 36px !important;
     margin: auto !important;
 }
 .main-header {
@@ -33,7 +39,7 @@ st.markdown("""
     padding: 16px;
     text-align: center;
     margin-bottom: 15px;
-    box-shadow: 0 0 15px rgba(0, 255, 102, 0.08);
+    box-shadow: 0 0 20px rgba(0, 255, 102, 0.1);
 }
 .welcome-tag {
     background: #092318;
@@ -49,7 +55,7 @@ st.markdown("""
 }
 .main-title {
     color: #00F080;
-    font-size: 22px;
+    font-size: 23px;
     font-weight: 750;
     letter-spacing: 1px;
     margin: 4px 0;
@@ -77,8 +83,9 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #09170F;
     border: 1px solid #174B30;
     border-radius: 12px;
-    padding: 15px 20px;
+    padding: 16px 22px;
     margin-bottom: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
 .stTextInput label {
     color: #00C968 !important;
