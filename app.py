@@ -13,9 +13,11 @@ if "page" not in st.session_state:
 if "users_db" not in st.session_state:
     st.session_state.users_db = {}
 
-# Custom CSS with Dark Background & Four Corner Green Glow Effect + Wider Desktop Layout
+# Importing professional tech font for pro trading terminal look
 st.markdown("""
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Segoe+UI:wght@600;750&display=swap');
+
 .stApp {
     background: 
         radial-gradient(circle at 0% 0%, rgba(0, 200, 80, 0.15) 0%, transparent 45%),
@@ -52,13 +54,16 @@ st.markdown("""
     letter-spacing: 2px;
     display: inline-block;
     margin-bottom: 6px;
+    font-family: 'Segoe UI', sans-serif;
 }
 .main-title {
+    font-family: 'Orbitron', sans-serif !important;
     color: #00F080;
-    font-size: 23px;
-    font-weight: 750;
-    letter-spacing: 1px;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
     margin: 4px 0;
+    text-shadow: 0 0 10px rgba(0, 240, 128, 0.4);
 }
 .sub-title {
     color: #008F49;
@@ -66,6 +71,7 @@ st.markdown("""
     font-weight: 600;
     letter-spacing: 1.5px;
     margin: 0;
+    font-family: 'Segoe UI', sans-serif;
 }
 .heading-box {
     background: #0B2015;
