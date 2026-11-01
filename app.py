@@ -13,7 +13,7 @@ if "page" not in st.session_state:
 if "users_db" not in st.session_state:
     st.session_state.users_db = {}
 
-# Desktop-friendly balanced width & clean styling
+# Desktop-friendly wider layout as requested
 st.markdown("""
 <style>
 .stApp {
@@ -22,15 +22,15 @@ st.markdown("""
     font-family: 'Segoe UI', Arial, sans-serif;
 }
 .block-container {
-    max-width: 680px !important;
-    padding: 20px 25px 30px !important;
+    max-width: 820px !important;
+    padding: 22px 30px 35px !important;
     margin: auto !important;
 }
 .main-header {
     background: #050D09;
     border: 2px solid #174B30;
     border-radius: 14px;
-    padding: 15px;
+    padding: 16px;
     text-align: center;
     margin-bottom: 15px;
     box-shadow: 0 0 15px rgba(0, 255, 102, 0.08);
@@ -77,7 +77,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: #09170F;
     border: 1px solid #174B30;
     border-radius: 12px;
-    padding: 15px 18px;
+    padding: 15px 20px;
     margin-bottom: 12px;
 }
 .stTextInput label {
