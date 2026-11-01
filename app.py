@@ -564,3 +564,5 @@ st.markdown("""
     ● FULL SCREEN DESKTOP SECURE | KUSHAL PRO MAX TRADING © 2026
 </div>
 """, unsafe_allow_html=True)
+if "selected_market" not in st.session_state:
+    st.session_state.selected_market = "Indian Market"
